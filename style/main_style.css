@@ -1,0 +1,243 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-01-24, 08:54:48
+    Author     : charl
+*/
+
+/*
+Colors from dark to light:
+ R   G   B 
+019 083 171
+021 106 222
+025 110 224
+041 132 255
+087 158 255
+*/
+
+/* Container style */
+.main_container{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../resources/Background.png');
+    background-repeat: no-repeat;
+    background-size: 30em;
+    font-family: sans-serif;
+}
+
+.sub_container{
+    padding-top: 1em;
+    margin-left: 15.5em;
+}
+
+.content{
+    background-image: url('../resources/Background2.png');
+    padding-left: 2em;
+    height: 42em;
+}
+
+/* Menu style */
+.menu{
+    float: left;
+    height: 100%;
+    width: 15.5em;
+    margin: 0;
+    margin-top: 10em
+}
+
+.menu h3{
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 16pt;
+}
+
+.menu_item{
+    width: 95%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin: 1em 0 1em 0;
+    color: #ffffff;
+    border-bottom-right-radius: 0.5em;  
+    border-top-right-radius: 0.5em;
+    font-family: sans-serif;
+}
+
+.mi_1{
+    background-color: rgb(041, 132, 255);
+}
+
+.mi_2{
+    background-color: rgb(087, 158, 255);
+}
+
+.menu_item span{
+    color: #ffffff;
+    font-style: normal;
+    padding-left: 10px;
+}
+
+.menu_item:hover{
+    background-color: #5EC78A;
+}
+
+/* Table style */
+.table_head_1 {
+    color: white;
+    border-radius: 7px 7px 0px 0px;
+    background-color: rgb(021, 106, 222);
+    padding: 0.5em 2em 0.5em 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.table_head_2 {
+    color: white;
+    background-color: #73D176;
+}
+
+.table{
+    border-left: none;
+    border-right: none;
+}
+
+.table > tbody > tr > td{
+    border-bottom: 1px solid rgb(021, 106, 222); 
+    padding: 1em 0 1em 0;
+}
+
+.text_cell{
+    padding-left: 1em;
+}
+
+/* Button style */
+
+.button{
+    padding: 0.5em 1em 0.5em 1em;
+    margin: 0.2em;
+    background-color: gray;
+    border-radius: 7px 7px 7px 7px;
+    border: 1px solid black;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn_edit{
+    background-color: cadetblue;
+    background: -webkit-radial-gradient(cadetblue, powderblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(cadetblue, powderblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(cadetblue, powderblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(cadetblue, powderblue); /* Standard syntax */
+    border: 1px solid powderblue;
+}
+
+.btn_edit:hover{
+    background-color: lemonchiffon;
+    background: -webkit-radial-gradient(powderblue, cadetblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(powderblue, cadetblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(powderblue, cadetblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(powderblue, cadetblue); /* Standard syntax */
+}
+
+.btn_delete{
+    background-color: darkslateblue;
+    background: -webkit-radial-gradient(darkslateblue, slateblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(darkslateblue, slateblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(darkslateblue, slateblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(darkslateblue, slateblue); /* Standard syntax */
+    border: 1px solid darkslateblue;
+}
+
+.btn_delete:hover{
+    background-color: slateblue;
+    background: -webkit-radial-gradient(slateblue, darkslateblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(slateblue, darkslateblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(slateblue, darkslateblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(slateblue, darkslateblue); /* Standard syntax */
+}
+
+.btn_submit{
+    background-color: dodgerblue;
+    background: -webkit-radial-gradient(dodgerblue, deepskyblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(dodgerblue, deepskyblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(dodgerblue, deepskyblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(dodgerblue, deepskyblue); /* Standard syntax */
+    border: 1px solid dodgerblue;
+}
+
+.btn_submit:hover{
+    background-color: deepskyblue;
+    background: -webkit-radial-gradient(deepskyblue, dodgerblue); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(deepskyblue, dodgerblue); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(deepskyblue, dodgerblue); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(deepskyblue, dodgerblue); /* Standard syntax */
+}
+
+.btn_disabled{
+    
+}
+
+/* Form style */
+
+.form_section{
+    width: 70%;
+    margin: 3em;
+    text-align: right;
+}
+
+.form_section > label{
+    font-weight: bold;
+    color: rgb(041, 132, 255);
+    font-size: 16pt;
+    width: 40%;
+    float: left;
+}
+
+.input{
+    border: none;
+    border-bottom: 2px solid rgb(025, 110, 224);
+    background-color: transparent;
+    padding: 0.5em 2em 0.1em 0.5em;
+    font-size: 14pt;
+    width: 40%;
+    outline: none;
+}
+
+.input:focus{
+    outline: none;
+}
+
+
+
+/* Other styles */
+
+h1{
+    width: 100%;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    color: rgb(021, 106, 222);
+}
+
+hr{
+    border: 0; 
+    height: 2px; 
+    background-image: -webkit-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
+    background-image: -moz-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
+    background-image: -ms-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
+    background-image: -o-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0); 
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    -user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}

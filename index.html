@@ -1,0 +1,31 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>MeHome</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style/main_style.css"/>
+        <link rel="stylesheet" href="style/font-awesome-4.7.0/css/font-awesome.min.css"/>
+        <script src="script/main_script.js" type="text/javascript"></script>
+        <script src="script/progress_bar.js" type="text/javascript"></script>
+        <script src="script/task_controller.js" type="text/javascript"></script>
+        <link rel="icon" type="image/png" href="resources/house-logo-hi.png" />
+    </head>
+    <body class="main_container">
+        <div class="menu">
+            <h3>Menu</h3>
+            <div class="menu_item mi_1" onclick="LoadPage('views/Home.xhtml', [])"><span>Accueil</span></div>
+            <div class="menu_item mi_2" onclick="LoadPage('views/Tasks.xhtml', [])"><span>Mes Tâches</span></div>            
+            <div class="menu_item mi_1"><span>Mes Notes</span></div>
+            <div class="menu_item mi_2"><span>Mon Compte</span></div>
+            <div class="menu_item mi_1" onclick="LoadPage('views/testing.xhtml', [])"><span>Paramètres</span></div>
+        </div>
+        <div class="sub_container" id="content">
+            
+        </div>
+    </body>
+</html>
