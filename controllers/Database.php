@@ -18,13 +18,61 @@ class Database{
     }
     
     public function getAll($table, $condition){
-        $data = json_decode(file_get_contents('../data/' . $this->file), true);
-        return (string)json_encode($data[$table]);
+        $entries = $this->getEntries($table);
+        return (string)json_encode($entries);
+    }
+    
+    public function update($table, $data){
+        $entries = $this->getEntries($table);
+        $infos = json_decode($data, true);
+        $this->dump(print_r($infos, true));
+        for($j = 0; $j < count($infos); $j++){
+            for($i = 0; $i < count($entries); $i++){
+                if($entries[$i]['id'] === $infos[$j]['id']){                
+                    foreach(array_keys($infos[$j]) as $info){
+                        $entries[$i][$info] = $infos[$j][$info];
+                    }
+                    break;
+                }            
+            }
+        }
+        
+        
+        $this->push($table, $entries);
+    }
+    
+    public function add($table, $data){
+        $entries = $this->getEntries($table);
+        $id = $this->getEntries("Ids");
+        $infos = json_decode($data, true);
+        
+        $newEntry = '{ "id": ' . ($id + 1);
+        foreach(array_keys($infos) as $info){
+            $newEntry = $newEntry . ',"' . $info . '": ' . $infos[$info];
+        }
+        $newEntry = $newEntry . '}';
+        echo json_encode($newEntry);
+        array_push($entries, json_decode($newEntry));
+        $this->push($table, $entries);
+        $this->push("Ids", $id + 1);
     }
     
     public function dump($data){
         $fp = fopen('../data/phpdump.txt', 'w');
         fwrite($fp, $data);
+        fclose($fp);
+    }
+    
+    private function getEntries($table){
+        return json_decode(file_get_contents('../data/' . $this->file), true)[$table];
+    }
+    
+    private function push($table, $new){
+        $json = json_decode(file_get_contents('../data/' . $this->file), true);
+        $json[$table] = $new;
+        
+        $fp = fopen('../data/' . $this->file, 'w');
+        fwrite($fp, json_encode($json));
         fclose($fp);
     }
 }

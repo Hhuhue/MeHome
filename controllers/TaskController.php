@@ -14,3 +14,18 @@ if(isset($_GET['op'])){
             return -1;
     }
 }
+else if(isset($_POST['op'])){
+    $bd = new Database($_POST['file']);
+    
+    switch ($_POST['op']){
+        case Operation::Update :
+            echo $bd->update($_POST['table'], $_POST['data']); 
+            break;
+        case Operation::Add :
+            echo $bd->add($_POST['table'], $_POST['data']);
+            break;
+        
+        default:
+            return -1;
+    }
+}

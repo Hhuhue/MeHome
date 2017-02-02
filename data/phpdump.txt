@@ -1,68 +1,21 @@
 Array
 (
-    [Tasks] => Array
+    [0] => Array
         (
-            [0] => Array
-                (
-                    [id] => 1
-                    [description] => Finir rédaction chap.1 comptabilité
-                    [progress] => 10
-                    [weight] => 10
-                    [date] => 02-02-2017
-                    [completed] => 
-                )
-
-            [1] => Array
-                (
-                    [id] => 2
-                    [description] => Rédiger notes TCRA Santé
-                    [progress] => 2
-                    [weight] => 5
-                    [date] => 06-02-2017
-                    [completed] => 
-                )
-
-            [2] => Array
-                (
-                    [id] => 3
-                    [description] => Terminer chap.6 Macroéconomie
-                    [progress] => 8
-                    [weight] => 10
-                    [date] => 01-02-2017
-                    [completed] => 
-                )
-
-            [3] => Array
-                (
-                    [id] => 4
-                    [description] => Travail d'équipe TCRA
-                    [progress] => 0
-                    [weight] => 10
-                    [date] => À réviser
-                    [completed] => 
-                )
-
-            [4] => Array
-                (
-                    [id] => 5
-                    [description] => Créer une page de notes pour ce site
-                    [progress] => 0
-                    [weight] => 5
-                    [date] => À réviser
-                    [completed] => 
-                )
-
-            [5] => Array
-                (
-                    [id] => 6
-                    [description] => Faire exercice prob
-                    [progress] => 0
-                    [weight] => 8
-                    [date] => Régulièrement
-                    [completed] => 
-                )
-
+            [id] => 5
+            [progress] => 0
         )
 
-    [Ids] => 6
+    [1] => Array
+        (
+            [id] => 6
+            [progress] => 0
+        )
+
+    [2] => Array
+        (
+            [id] => 7
+            [progress] => 0
+        )
+
 )
