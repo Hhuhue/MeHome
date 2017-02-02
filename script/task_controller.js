@@ -53,6 +53,12 @@ function DeleteTask(id){
 
 function CompleteTask(id){
     
+    var modif = [{"id": id, "completed": 1}];
+    
+    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
+    var path = root + "controllers/TaskController.php";
+    
+    SendRequest(path, request); 
 }
 
 function SendRequest(path, params){

@@ -11,7 +11,7 @@
                     <td class="table_head_1"></td>
                 </tr>
             </thead>
-            <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight">
+            <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight" condition="completed:0">
                 <tr>
                     <td><span class="text_cell">%description%</span></td>
                     <td class="noselect">
@@ -24,7 +24,7 @@
                         <span>
                             <span class="button btn_edit" onclick="alert(%id%)">Modifer</span>
                             <span class="button btn_delete" onclick="alert(%id%)">Supprimer</span>
-                            <span class="button btn_submit" onclick="alert(%id%)">Compléter</span>
+                            <span class="button btn_submit" onclick="CompleteTask(%id%)">Compléter</span>
                         </span>
                     </td>
                 </tr>

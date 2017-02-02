@@ -68,9 +68,12 @@ function ExecuteForEach(){
         var element = loops[t].getAttribute("element");
         var from = loops[t].getAttribute("from");
         var data = loops[t].getAttribute("data").split(",");
+        var condition = loops[t].getAttribute("condition").split(":");
         
         var html = loops[t].innerHTML;
-        var request = "?op=0&file=" + from + "&table=" + element + "&cndt=";
+        var cndt = {"attr" : condition[0], "value": parseInt(condition[1])};
+        
+        var request = "?op=0&file=" + from + "&table=" + element + "&cndt=" + JSON.stringify(cndt);
         var keys = {"loop" : loops[t], "data": data, "element": element, "html": html};
 
         loops[t].innerHTML = "";       
@@ -107,8 +110,14 @@ function loadJSON(path, success, error, keys)
     {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                if (success)
-                    success(JSON.parse(xhr.responseText), keys);
+                if (success){
+                    var response = xhr.responseText;
+                    if(response.search('<br />') !== -1){
+                        document.getElementById('content').innerHTML = response;
+                    } else {
+                        success(JSON.parse(xhr.responseText), keys);                   
+                    }    
+                }                
             } else {
                 if (error)
                     error(xhr);

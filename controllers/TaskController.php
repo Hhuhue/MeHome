@@ -8,7 +8,7 @@ if(isset($_GET['op'])){
     
     switch ($_GET['op']){
         case Operation::GetAll :
-            echo $bd->getAll($_GET['table'], ''); break;
+            echo $bd->getAll($_GET['table'], $_GET['cndt']); break;
 
         default:
             return -1;

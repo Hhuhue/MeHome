@@ -19,13 +19,23 @@ class Database{
     
     public function getAll($table, $condition){
         $entries = $this->getEntries($table);
-        return (string)json_encode($entries);
+        $filter = json_decode($condition, true);
+        $filteredEntries = array();
+        
+        foreach($entries as $entry){
+            if($entry[$filter["attr"]] === $filter["value"]){
+                array_push($filteredEntries, $entry);
+            }
+        }
+        
+        return (string)json_encode($filteredEntries);
     }
     
     public function update($table, $data){
         $entries = $this->getEntries($table);
         $infos = json_decode($data, true);
         $this->dump(print_r($infos, true));
+        
         for($j = 0; $j < count($infos); $j++){
             for($i = 0; $i < count($entries); $i++){
                 if($entries[$i]['id'] === $infos[$j]['id']){                

@@ -2,20 +2,8 @@ Array
 (
     [0] => Array
         (
-            [id] => 5
-            [progress] => 0
-        )
-
-    [1] => Array
-        (
-            [id] => 6
-            [progress] => 0
-        )
-
-    [2] => Array
-        (
-            [id] => 7
-            [progress] => 0
+            [id] => 3
+            [completed] => 1
         )
 
 )
