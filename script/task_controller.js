@@ -51,6 +51,60 @@ function DeleteTask(id){
     
 }
 
+function EditTaskGet(id){
+    var xhr = new XMLHttpRequest();
+    var request = "op=1&file=tasks.json&table=Tasks&id=" + id;
+    
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var response = xhr.responseText;
+                
+                if(response.search('<br />') !== -1){
+                    document.getElementById('content').innerHTML = response;
+                } else {
+                    var json = JSON.parse(xhr.responseText);
+                    var data = [
+                        ["description", json["description"]],
+                        ['progress', json["progress"]],
+                        ["weight", json["weight"]],
+                        ["date", json["date"]],
+                        ["taks_id", json["id"]]
+                    ];
+                    LoadPage("views/EditTask.xhtml", data);                   
+                }    
+                               
+            } else {
+                console.error(xhr);
+            }
+        }
+    };
+    
+    xhr.open("GET", root + "controllers/TaskController.php?" + request, true);
+    xhr.send();
+}
+
+function EditTaskPost(id){
+    var description = document.getElementById("desc").value;
+    var weight = parseInt(document.getElementById("score").value);
+    var progress = parseInt(document.getElementById("comp").value);
+    var date = document.getElementById("date").value;
+    
+    var json = {
+        "id": id,
+        "description": '"' + description + '"',
+        "progress": progress,
+        "weight": weight,
+        "date": '"' + date + '"'
+    };
+    
+    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
+    var path = root + "controllers/TaskController.php";
+
+    SendRequest(path, request);
+}
+
 function CompleteTask(id){
     
     var modif = [{"id": id, "completed": 1}];

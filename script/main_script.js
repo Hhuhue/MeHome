@@ -7,7 +7,7 @@
 var newPage = 100;
 
 window.onload = function(){
-    LoadPage("views/Home.xhtml");
+    LoadPage("views/Home.xhtml", []);
 };
 
 setInterval(function(){
@@ -35,6 +35,11 @@ function LoadPage(ref, data){
         {
             var allText = rawFile.responseText;
             var container = document.getElementById("content");
+            
+            for(var i = 0; i < data.length; i++){
+                allText = replaceAll(allText, data[i][0], data[i][1]);                
+            }             
+            
             container.innerHTML = allText;
         }
     };

@@ -31,10 +31,23 @@ class Database{
         return (string)json_encode($filteredEntries);
     }
     
+    public function getById($table, $id){
+        $entries = $this->getEntries($table);
+        $match = array();
+        
+        foreach($entries as $entry){
+            if($entry["id"] == $id){
+               $match = $entry;
+               break;
+            }
+        }
+        
+        return (string)json_encode($match);
+    }
+    
     public function update($table, $data){
         $entries = $this->getEntries($table);
         $infos = json_decode($data, true);
-        $this->dump(print_r($infos, true));
         
         for($j = 0; $j < count($infos); $j++){
             for($i = 0; $i < count($entries); $i++){
@@ -45,8 +58,7 @@ class Database{
                     break;
                 }            
             }
-        }
-        
+        }      
         
         $this->push($table, $entries);
     }
@@ -61,8 +73,9 @@ class Database{
             $newEntry = $newEntry . ',"' . $info . '": ' . $infos[$info];
         }
         $newEntry = $newEntry . '}';
-        echo json_encode($newEntry);
+        
         array_push($entries, json_decode($newEntry));
+        
         $this->push($table, $entries);
         $this->push("Ids", $id + 1);
     }
