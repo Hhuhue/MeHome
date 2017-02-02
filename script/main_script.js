@@ -70,26 +70,12 @@ function ExecuteForEach(){
         var data = loops[t].getAttribute("data").split(",");
         
         var html = loops[t].innerHTML;
+        var request = "?op=0&file=" + from + "&table=" + element + "&cndt=";
+        var keys = {"loop" : loops[t], "data": data, "element": element, "html": html};
 
-        loops[t].innerHTML = "";
+        loops[t].innerHTML = "";       
         
-        loadJSON("data/" + from, 
-            function(json, keys){
-                var datas = json[keys["element"]];
-                for(var i = 0; i < datas.length; i++){
-                    var rawData = keys["html"];
-                    
-                    for (var j= 0; j < data.length; j++){
-                        rawData = replaceAll(rawData, keys["data"][j], datas[i][keys["data"][j]]);
-                    }
-                    keys["loop"].innerHTML = keys["loop"].innerHTML + rawData;
-                }
-            },
-            function(error){
-                console.error(error);
-            },
-            {"loop" : loops[t], "data": data, "element": element, "html": html}
-        );   
+        loadJSON("controllers/TaskController.php" + request, ForEach, Error, keys);   
 
         loops[t].setAttribute("name", "foreach_complete");
     }
@@ -132,5 +118,20 @@ function loadJSON(path, success, error, keys)
     
     xhr.open("GET", path, true);
     xhr.send();
+}
+
+function ForEach(json, keys){    
+    for(var i = 0; i < json.length; i++){
+        var rawData = keys["html"];
+
+        for (var j= 0; j < keys["data"].length; j++){
+            rawData = replaceAll(rawData, keys["data"][j], json[i][keys["data"][j]]);
+        }
+        keys["loop"].innerHTML = keys["loop"].innerHTML + rawData;
+    }
+}
+
+function Error(error){
+    console.error(error);
 }
 
