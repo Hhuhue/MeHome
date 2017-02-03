@@ -52,8 +52,8 @@ class Database{
         for($j = 0; $j < count($infos); $j++){
             for($i = 0; $i < count($entries); $i++){
                 if($entries[$i]['id'] === $infos[$j]['id']){                
-                    foreach(array_keys($infos[$j]) as $info){
-                        $entries[$i][$info] = $infos[$j][$info];
+                    foreach(array_keys($infos[$j]) as $key){
+                        $entries[$i][$key] = $infos[$j][$key];
                     }
                     break;
                 }            

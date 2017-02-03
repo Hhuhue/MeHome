@@ -21,6 +21,7 @@ setInterval(function(){
         else if(document.getElementsByName("bar").length !== 0){
             ShowBars();  
         }
+        UpdateSelects();
         newPage--;
     }
 }, 20);
@@ -142,6 +143,24 @@ function ForEach(json, keys){
             rawData = replaceAll(rawData, keys["data"][j], json[i][keys["data"][j]]);
         }
         keys["loop"].innerHTML = keys["loop"].innerHTML + rawData;
+    }
+}
+
+function UpdateSelects(){
+    var selects = document.getElementsByTagName("select");
+    
+    for(var i = 0; i < selects.length; i++){
+        var currentSelect = selects[i];
+        if(currentSelect.hasAttribute("value")){
+            var value = currentSelect.getAttribute("value");
+            var options = currentSelect.options;
+            for(var j = 0; j < options.length; j++){
+                if(options[j].getAttribute("value") === value){
+                    options[j].setAttribute("selected", "selected");
+                    currentSelect.removeAttribute("value");
+                }
+            }
+        }
     }
 }
 

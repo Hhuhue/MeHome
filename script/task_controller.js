@@ -70,7 +70,7 @@ function EditTaskGet(id){
                         ['progress', json["progress"]],
                         ["weight", json["weight"]],
                         ["date", json["date"]],
-                        ["taks_id", json["id"]]
+                        ["task_id", json["id"]]
                     ];
                     LoadPage("views/EditTask.xhtml", data);                   
                 }    
@@ -91,13 +91,13 @@ function EditTaskPost(id){
     var progress = parseInt(document.getElementById("comp").value);
     var date = document.getElementById("date").value;
     
-    var json = {
+    var json = [{
         "id": id,
-        "description": '"' + description + '"',
+        "description": description,
         "progress": progress,
         "weight": weight,
-        "date": '"' + date + '"'
-    };
+        "date": date
+    }];
     
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
     var path = root + "controllers/TaskController.php";

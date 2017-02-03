@@ -14,7 +14,7 @@
             <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight" condition="completed:0">
                 <tr>
                     <td><span class="text_cell">%description%</span></td>
-                    <td class="noselect">
+                    <td class="noselect" style="text-align: center;">
                         <span class="fa fa-minus" onclick="removeToBar('progress_bar_%id%')"></span>
                         <span><canvas id="progress_bar_%id%" data="size:%weight%,filled:%progress%" height="15" name="bar"></canvas></span>
                         <span class="fa fa-plus" onclick="addToBar('progress_bar_%id%')"></span>
