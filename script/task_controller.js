@@ -47,8 +47,12 @@ function UpdateTasks(){
     SendRequest(path, request); 
 }
 
-function DeleteTask(id){
+function DeleteTask(id){    
+    var request = "op=3&file=tasks.json&table=Tasks&id=" + id;
+    var path = root + "controllers/TaskController.php";
     
+    SendRequest(path, request);
+    LoadPage("views/Tasks.xhtml", []);
 }
 
 function EditTaskGet(id){

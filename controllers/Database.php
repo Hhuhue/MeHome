@@ -60,6 +60,7 @@ class Database{
             }
         }      
         
+        $entries = array_values($entries);
         $this->push($table, $entries);
     }
     
@@ -76,8 +77,22 @@ class Database{
         
         array_push($entries, json_decode($newEntry));
         
+        $entries = array_values($entries);
         $this->push($table, $entries);
         $this->push("Ids", $id + 1);
+    }
+    
+    public function delete($table, $id){
+        $entries = $this->getEntries($table);
+        
+        for($i = 0; $i < count($entries); $i++){
+            if($entries[$i]["id"] == $id){
+               unset($entries[$i]);
+               break;
+            }
+        }
+        $entries = array_values($entries);
+        $this->push($table, $entries);
     }
     
     public function dump($data){
