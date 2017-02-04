@@ -6,6 +6,7 @@
 
 //The number of attempts to load the content of a page
 var ticks = 100;
+var root = "http://localhost/MeHome/public_html/";
 
 //On loand, we load the home page.
 window.onload = function(){
@@ -43,27 +44,21 @@ function ContentLoader(){
  * @param {(String|Number)} data[].value - The value of the information
  * @returns {undefined}
  */
-function LoadPage(ref, data){    
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", ref, true);
+function LoadPage(ref, data){   
     
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            var allText = rawFile.responseText;
-            var container = document.getElementById("content");
-            
-            if(data !== undefined){
-                for(var i = 0; i < data.length; i++){
-                    allText = replaceAll(allText, data[i]["info"], data[i]["value"]);                
-                }                  
-            }           
-            
-            container.innerHTML = allText;
-        }
-    };
-    rawFile.send(null);
+    var action = function(allText, params = data){
+        var container = document.getElementById("content");
+
+        if(data !== undefined){
+            for(var i = 0; i < data.length; i++){
+                allText = replaceAll(allText, params[i]["info"], data[i]["value"]);                
+            }                  
+        }          
+
+        container.innerHTML = allText;
+    }
+    
+    GetRequest(ref, action);
     
     ticks = 100;
 }
@@ -107,11 +102,23 @@ function ExecuteForEach(){
         
         var request = "?op=0&file=" + from + "&table=" + element + "&cndt=" + JSON.stringify(cndt);
         var keys = {"loop" : loops[t], "data": data, "element": element, "html": html};
-
-        loops[t].innerHTML = "";       
         
-        loadJSON("controllers/TaskController.php" + request, ForEach, Error, keys);   
+        var action = function(json, params = keys){            
+            var parsedJson = JSON.parse(json);
+            
+            for(var i = 0; i < parsedJson.length; i++){
+                var rawData = params["html"];
 
+                for (var j = 0; j < params["data"].length; j++){
+                    rawData = replaceAll(rawData, params["data"][j], parsedJson[i][params["data"][j]]);
+                }
+                params["loop"].innerHTML = params["loop"].innerHTML + rawData;
+            }
+        };
+        
+        GetRequest(root + "/controllers/TaskController.php" + request, action);
+        
+        loops[t].innerHTML = "";       
         loops[t].setAttribute("name", "foreach_complete");
     }
 }
@@ -132,73 +139,22 @@ function ShowBars(){
 /**
  * Replace all occurences of <tt>searched</tt> in <tt>string</tt> by the value of <tt>replacement</tt>.
  * @param {String} string - The text in which to replace the <tt>searched</tt> value
- * @param {type} searched - The value of the text to replace
- * @param {type} replacement - The value of the text to replace <tt>searched</tt> with
- * @returns {replaceAll.result} The <tt>string</tt> with <tt>searched</tt> replaced
+ * @param {String} searched - The value of the text to replace
+ * @param {String} replacement - The value of the text to replace the searched value with
+ * @returns {String} The <tt>string</tt> with <tt>searched</tt> replaced
  */
 function replaceAll(string, searched, replacement){
     var result = string;
     
     while(result.search("%" + searched + "%") !== -1){
-            result = result.replace("%" + searched + "%", replacement);		
+        result = result.replace("%" + searched + "%", replacement);		
     }	
     
     return result;
 }
 
 /**
- * 
- * @param {string} path
- * @param {type} success
- * @param {type} error
- * @param {Object} keys
- * @returns {undefined}
- */
-function loadJSON(path, success, error, keys)
-{
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                if (success){
-                    var response = xhr.responseText;
-                    if(response.search('<br />') !== -1){
-                        document.getElementById('content').innerHTML = response;
-                    } else {
-                        success(JSON.parse(xhr.responseText), keys);                   
-                    }    
-                }                
-            } else {
-                if (error)
-                    error(xhr);
-            }
-        }
-    };
-    
-    xhr.open("GET", path, true);
-    xhr.send();
-}
-
-/**
- * 
- * @param {type} json
- * @param {type} keys
- * @returns {undefined}
- */
-function ForEach(json, keys){    
-    for(var i = 0; i < json.length; i++){
-        var rawData = keys["html"];
-
-        for (var j= 0; j < keys["data"].length; j++){
-            rawData = replaceAll(rawData, keys["data"][j], json[i][keys["data"][j]]);
-        }
-        keys["loop"].innerHTML = keys["loop"].innerHTML + rawData;
-    }
-}
-
-/**
- * 
+ * Selects the option that has the same value than its select parent for each select tags.
  * @returns {undefined}
  */
 function UpdateSelects(){
@@ -220,11 +176,57 @@ function UpdateSelects(){
 }
 
 /**
- * 
- * @param {type} error
+ * Executes a XMLHttpRequest of type GET
+ * @param {String} path - The path to the targeted file
+ * @param {type} action - The function to execute on success
  * @returns {undefined}
  */
-function Error(error){
-    console.error(error);
+function GetRequest(path, action){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", path, true);
+    
+    xhr.onreadystatechange = function ()
+    {
+        if(xhr.readyState === XMLHttpRequest.DONE)
+        {
+            if(xhr.status === 200){
+                action(xhr.responseText);
+            } else {
+                console.error(xhr);
+            }
+        }
+    };
+    xhr.send();
+}
+
+/**
+ * Executes a XMLHttpRequest of type POST
+ * @param {String} path - The path to the targeted file
+ * @param {Object} params - The parameters of the POST request
+ * @returns {undefined}
+ */
+function PostRequest(path, params){
+        
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", path, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
+    xhr.onreadystatechange = function(){
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var response = xhr.responseText;
+                if(response.search('<br />') !== -1){
+                    document.getElementById('content').innerHTML = response;
+                } else {
+                    alert(xhr.responseText);                    
+                }
+
+            } else {
+                console.error(xhr);
+            }
+        }
+    };
+    
+    xhr.send(params);
 }
 

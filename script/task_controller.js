@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-var root = "http://localhost/MeHome/public_html/";
-
+/**
+ * Adds a new task in the database.
+ * @returns {undefined}
+ */
 function AddTask(){
     var description = document.getElementById("desc").value;
     var weight = parseInt(document.getElementById("score").value);
@@ -23,9 +25,13 @@ function AddTask(){
     var request = "op=4&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
     var path = root + "controllers/TaskController.php";
 
-    SendRequest(path, request);
+    PostRequest(path, request);
 }
 
+/**
+ * Updates one or many tasks from the database.
+ * @returns {undefined}
+ */
 function UpdateTasks(){
     var bars = document.getElementsByName("bar_complete");
     var barsToUpdate = [];
@@ -44,17 +50,27 @@ function UpdateTasks(){
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(barsToUpdate);
     var path = root + "controllers/TaskController.php";
     
-    SendRequest(path, request); 
+    PostRequest(path, request); 
 }
 
+/**
+ * Deletes the specified task from the database.
+ * @param {Number} id- The id of the task to delete
+ * @returns {undefined}
+ */
 function DeleteTask(id){    
     var request = "op=3&file=tasks.json&table=Tasks&id=" + id;
     var path = root + "controllers/TaskController.php";
     
-    SendRequest(path, request);
+    PostRequest(path, request);
     LoadPage("views/Tasks.xhtml", []);
 }
 
+/**
+ * Load the task edition page with the informations of the task to edit.
+ * @param {Number} id - The id of the task to edit
+ * @returns {undefined}
+ */
 function EditTaskGet(id){
     var xhr = new XMLHttpRequest();
     var request = "op=1&file=tasks.json&table=Tasks&id=" + id;
@@ -89,6 +105,11 @@ function EditTaskGet(id){
     xhr.send();
 }
 
+/**
+ * Sends the changes of the edited task to the database.
+ * @param {Number} id - The id of the edited task
+ * @returns {undefined}
+ */
 function EditTaskPost(id){
     var description = document.getElementById("desc").value;
     var weight = parseInt(document.getElementById("score").value);
@@ -106,9 +127,14 @@ function EditTaskPost(id){
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
     var path = root + "controllers/TaskController.php";
 
-    SendRequest(path, request);
+    PostRequest(path, request);
 }
 
+/**
+ * Changes the state of a task to completed.
+ * @param {Number} id - The id of the completed task
+ * @returns {undefined}
+ */
 function CompleteTask(id){
     
     var modif = [{"id": id, "completed": 1}];
@@ -116,34 +142,5 @@ function CompleteTask(id){
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
     var path = root + "controllers/TaskController.php";
     
-    SendRequest(path, request); 
+    PostRequest(path, request); 
 }
-
-function SendRequest(path, params){
-        
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", path, true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    
-    xhr.onreadystatechange = function(){
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                var response = xhr.responseText;
-                if(response.search('<br />') !== -1){
-                    document.getElementById('content').innerHTML = response;
-                } else {
-                    alert(xhr.responseText);                    
-                }
-
-            } else {
-                console.error(xhr);
-            }
-        }
-    };
-    
-    xhr.send(params);
-}
-
-
-
-
