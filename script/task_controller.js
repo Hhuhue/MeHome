@@ -70,11 +70,11 @@ function EditTaskGet(id){
                 } else {
                     var json = JSON.parse(xhr.responseText);
                     var data = [
-                        ["description", json["description"]],
-                        ['progress', json["progress"]],
-                        ["weight", json["weight"]],
-                        ["date", json["date"]],
-                        ["task_id", json["id"]]
+                        {"info": "description", "value": json["description"]},
+                        {"info": "progress", "value": json["progress"]},
+                        {"info": "weight", "value": json["weight"]},
+                        {"info": "date", "value": json["date"]},
+                        {"info": "task_id", "value": json["id"]}
                     ];
                     LoadPage("views/EditTask.xhtml", data);                   
                 }    

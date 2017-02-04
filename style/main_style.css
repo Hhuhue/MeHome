@@ -24,7 +24,7 @@ Colors from dark to light:
     width: 100%;
     height: 100%;
     background-image: url('../resources/Background.png');
-	background-attachment: fixed;
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: 30em;
     font-family: sans-serif;
@@ -88,6 +88,10 @@ Colors from dark to light:
     background-color: #5EC78A;
 }
 
+.menu_item:active{
+    background-color: #50b279;
+}
+
 /* Table style */
 .table_head_1 {
     color: white;
@@ -139,7 +143,7 @@ Colors from dark to light:
     border: 1px solid powderblue;
 }
 
-.btn_edit:hover{
+.btn_edit:active{
     background-color: lemonchiffon;
     background: -webkit-radial-gradient(powderblue, cadetblue); /* Safari 5.1 to 6.0 */
     background: -o-radial-gradient(powderblue, cadetblue); /* For Opera 11.6 to 12.0 */
@@ -156,7 +160,7 @@ Colors from dark to light:
     border: 1px solid darkslateblue;
 }
 
-.btn_delete:hover{
+.btn_delete:active{
     background-color: slateblue;
     background: -webkit-radial-gradient(slateblue, darkslateblue); /* Safari 5.1 to 6.0 */
     background: -o-radial-gradient(slateblue, darkslateblue); /* For Opera 11.6 to 12.0 */
@@ -173,7 +177,7 @@ Colors from dark to light:
     border: 1px solid dodgerblue;
 }
 
-.btn_submit:hover{
+.btn_submit:active{
     background-color: deepskyblue;
     background: -webkit-radial-gradient(deepskyblue, dodgerblue); /* Safari 5.1 to 6.0 */
     background: -o-radial-gradient(deepskyblue, dodgerblue); /* For Opera 11.6 to 12.0 */
@@ -215,8 +219,6 @@ Colors from dark to light:
     outline: none;
 }
 
-
-
 /* Other styles */
 
 h1{
@@ -236,7 +238,7 @@ hr{
     background-image: -o-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0); 
 }
 
-.noselect {
+.no_select {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */

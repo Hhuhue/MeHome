@@ -4,14 +4,23 @@
  * and open the template in the editor.
  */
 
-var newPage = 100;
+//The number of attempts to load the content of a page
+var ticks = 100;
 
+//On loand, we load the home page.
 window.onload = function(){
     LoadPage("views/Home.xhtml", []);
 };
 
-setInterval(function(){
-    if(newPage !==0 ){
+//Continuously check if the current page has content to load
+setInterval(ContentLoader, 20);
+
+/**
+ * Loads the dynamic content of the current page.
+ * @returns {undefined}
+ */
+function ContentLoader(){
+    if(ticks !==0 ){
         if(document.getElementsByName("for").length !== 0){
             ExecuteFor();            
         }
@@ -22,10 +31,18 @@ setInterval(function(){
             ShowBars();  
         }
         UpdateSelects();
-        newPage--;
+        ticks--;
     }
-}, 20);
+}
 
+/**
+ * Loads the content of a page with its data.
+ * @param {String} ref - The path to the file of the page to load
+ * @param {Object[]} [data] - The data to load into the page
+ * @param {String} data[].info - The name of the information 
+ * @param {(String|Number)} data[].value - The value of the information
+ * @returns {undefined}
+ */
 function LoadPage(ref, data){    
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", ref, true);
@@ -37,18 +54,24 @@ function LoadPage(ref, data){
             var allText = rawFile.responseText;
             var container = document.getElementById("content");
             
-            for(var i = 0; i < data.length; i++){
-                allText = replaceAll(allText, data[i][0], data[i][1]);                
-            }             
+            if(data !== undefined){
+                for(var i = 0; i < data.length; i++){
+                    allText = replaceAll(allText, data[i]["info"], data[i]["value"]);                
+                }                  
+            }           
             
             container.innerHTML = allText;
         }
     };
     rawFile.send(null);
     
-    newPage = 100;
+    ticks = 100;
 }
 
+/**
+ * Executes the For loops in the content of the currrent page.
+ * @returns {undefined}
+ */
 function ExecuteFor(){
     var loops = document.getElementsByName("for");
 
@@ -66,7 +89,10 @@ function ExecuteFor(){
         }
     }
 }
-
+/**
+ * Executes the For Each loops in the content of the currrent page.
+ * @returns {undefined}
+ */
 function ExecuteForEach(){
     var loops = document.getElementsByName("foreach");
     
@@ -90,6 +116,10 @@ function ExecuteForEach(){
     }
 }
 
+/**
+ * Displays the progress bars of the current page.
+ * @returns {undefined}
+ */
 function ShowBars(){
     var bars = document.getElementsByName("bar");
     
@@ -99,6 +129,13 @@ function ShowBars(){
     }
 }
 
+/**
+ * Replace all occurences of <tt>searched</tt> in <tt>string</tt> by the value of <tt>replacement</tt>.
+ * @param {String} string - The text in which to replace the <tt>searched</tt> value
+ * @param {type} searched - The value of the text to replace
+ * @param {type} replacement - The value of the text to replace <tt>searched</tt> with
+ * @returns {replaceAll.result} The <tt>string</tt> with <tt>searched</tt> replaced
+ */
 function replaceAll(string, searched, replacement){
     var result = string;
     
@@ -109,6 +146,14 @@ function replaceAll(string, searched, replacement){
     return result;
 }
 
+/**
+ * 
+ * @param {string} path
+ * @param {type} success
+ * @param {type} error
+ * @param {Object} keys
+ * @returns {undefined}
+ */
 function loadJSON(path, success, error, keys)
 {
     var xhr = new XMLHttpRequest();
@@ -135,6 +180,12 @@ function loadJSON(path, success, error, keys)
     xhr.send();
 }
 
+/**
+ * 
+ * @param {type} json
+ * @param {type} keys
+ * @returns {undefined}
+ */
 function ForEach(json, keys){    
     for(var i = 0; i < json.length; i++){
         var rawData = keys["html"];
@@ -146,6 +197,10 @@ function ForEach(json, keys){
     }
 }
 
+/**
+ * 
+ * @returns {undefined}
+ */
 function UpdateSelects(){
     var selects = document.getElementsByTagName("select");
     
@@ -164,6 +219,11 @@ function UpdateSelects(){
     }
 }
 
+/**
+ * 
+ * @param {type} error
+ * @returns {undefined}
+ */
 function Error(error){
     console.error(error);
 }
