@@ -32,12 +32,12 @@ Colors from dark to light:
 
 .sub_container{
     padding-top: 1em;
-    margin-left: 15.5em;
+    margin-left: 16.6em;
 }
 
 .content{
     background-image: url('../resources/Background2.png');
-	background-attachment: fixed;
+    background-attachment: fixed;
     padding-left: 2em;
     height: 100%;
 }
@@ -46,41 +46,30 @@ Colors from dark to light:
 .menu{
     float: left;
     height: 100%;
-    width: 15.5em;
+    width: 15em;
     margin: 0;
-    margin-top: 10em;
-	position: fixed;
-}
-
-.menu h3{
-    color: white;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 16pt;
+    margin-top: 6em;
+    position: fixed;
 }
 
 .menu_item{
-    width: 95%;
+    width: 100%;
     padding-top: 8px;
     padding-bottom: 8px;
-    margin: 1em 0 1em 0;
+    margin: 2em 0 2em 0;
     color: #ffffff;
-    border-bottom-right-radius: 0.5em;  
-    border-top-right-radius: 0.5em;
-    font-family: sans-serif;
 }
 
 .mi_1{
-    background-color: rgb(041, 132, 255);
+    background-color: #8A7460;
 }
 
 .mi_2{
-    background-color: rgb(087, 158, 255);
+    background-color: #B09378;
 }
 
 .menu_item span{
     color: #ffffff;
-    font-style: normal;
     padding-left: 10px;
 }
 
@@ -135,54 +124,34 @@ Colors from dark to light:
 }
 
 .btn_edit{
-    background-color: cadetblue;
-    background: -webkit-radial-gradient(cadetblue, powderblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(cadetblue, powderblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(cadetblue, powderblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(cadetblue, powderblue); /* Standard syntax */
-    border: 1px solid powderblue;
+    background-color: #8A7460;
+    border: 1px solid #B09378;
 }
 
 .btn_edit:active{
-    background-color: lemonchiffon;
-    background: -webkit-radial-gradient(powderblue, cadetblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(powderblue, cadetblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(powderblue, cadetblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(powderblue, cadetblue); /* Standard syntax */
+    background-color: #B09378;
+    border: 1px solid #8A7460;
 }
 
 .btn_delete{
-    background-color: darkslateblue;
-    background: -webkit-radial-gradient(darkslateblue, slateblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(darkslateblue, slateblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(darkslateblue, slateblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(darkslateblue, slateblue); /* Standard syntax */
-    border: 1px solid darkslateblue;
+    background-color: #536E91;
+    border: 1px solid #587EB0;
 }
 
 .btn_delete:active{
-    background-color: slateblue;
-    background: -webkit-radial-gradient(slateblue, darkslateblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(slateblue, darkslateblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(slateblue, darkslateblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(slateblue, darkslateblue); /* Standard syntax */
+    background-color: #587EB0;
+    border: 1px solid #536E91;
 }
 
 .btn_submit{
-    background-color: dodgerblue;
-    background: -webkit-radial-gradient(dodgerblue, deepskyblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(dodgerblue, deepskyblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(dodgerblue, deepskyblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(dodgerblue, deepskyblue); /* Standard syntax */
-    border: 1px solid dodgerblue;
+    background-color: #018791;
+    border: 1px solid #0296A1;
 }
 
 .btn_submit:active{
-    background-color: deepskyblue;
-    background: -webkit-radial-gradient(deepskyblue, dodgerblue); /* Safari 5.1 to 6.0 */
-    background: -o-radial-gradient(deepskyblue, dodgerblue); /* For Opera 11.6 to 12.0 */
-    background: -moz-radial-gradient(deepskyblue, dodgerblue); /* For Firefox 3.6 to 15 */
-    background: radial-gradient(deepskyblue, dodgerblue); /* Standard syntax */
+    background-color: #0296A1;
+    border: 1px solid #018791;
+   
 }
 
 .btn_disabled{
@@ -226,16 +195,16 @@ h1{
     font-family: sans-serif;
     font-weight: bold;
     text-align: center;
-    color: rgb(021, 106, 222);
+    color: #3d57b1;
 }
 
 hr{
     border: 0; 
     height: 2px; 
-    background-image: -webkit-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
-    background-image: -moz-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
-    background-image: -ms-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0);
-    background-image: -o-linear-gradient(left, #f0f0f0, #156ADE, #f0f0f0); 
+    background-image: -webkit-linear-gradient(left, #f0f0f0, #040073, #f0f0f0);
+    background-image: -moz-linear-gradient(left, #f0f0f0, #040073, #f0f0f0);
+    background-image: -ms-linear-gradient(left, #f0f0f0, #040073, #f0f0f0);
+    background-image: -o-linear-gradient(left, #f0f0f0, #040073, #f0f0f0); 
 }
 
 .no_select {
