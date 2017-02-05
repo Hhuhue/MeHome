@@ -8,31 +8,26 @@ and open the template in the editor.
     Author     : charl
 */
 
-/*
-Colors from dark to light:
- R   G   B 
-019 083 171
-021 106 222
-025 110 224
-041 132 255
-087 158 255
-*/
-
 /* Container style */
+html{
+    height: 100%;
+}
+
 .main_container{
     margin: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../resources/Background.png');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: 30em;
     font-family: sans-serif;
 }
 
 .sub_container{
     padding-top: 1em;
-    margin-left: 16.6em;
+    margin-left: 14em;
+    height: 100%;
+}
+
+.sub_container > div{
+    height: 100%;
 }
 
 .content{
@@ -42,13 +37,18 @@ Colors from dark to light:
     height: 100%;
 }
 
+
 /* Menu style */
 .menu{
+    background-image: url('../resources/MenuHeader.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 14em 14em;
+    background-color: rgb(019, 083, 171);
     float: left;
     height: 100%;
-    width: 15em;
+    width: 14em;
     margin: 0;
-    margin-top: 6em;
     position: fixed;
 }
 
@@ -56,16 +56,25 @@ Colors from dark to light:
     width: 100%;
     padding-top: 8px;
     padding-bottom: 8px;
-    margin: 2em 0 2em 0;
     color: #ffffff;
+    font-size: 12pt;
+}
+
+.menu_tabs{
+    margin-top: 14em;
 }
 
 .mi_1{
-    background-color: #8A7460;
+    background-color: #040073;
 }
 
 .mi_2{
-    background-color: #B09378;
+    background-color: rgb(019, 083, 171);
+}
+
+.mi_active{
+    border-left: 4px solid #018791;
+    width: 98%
 }
 
 .menu_item span{

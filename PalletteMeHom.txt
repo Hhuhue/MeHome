@@ -1,0 +1,19 @@
+Gray blue : #7F94B0
+Smooth blue : #587EB0
+Smooth blue+ : #536E91
+Nice brown : #8A7460
+Nice brown- : #B09378
+Verdish : #0296A1
+Verdish+ : #018791
+Glowy blue: #7E7EF7
+Glowy- blue : #9999F7
+Navy : #040073
+Dark navy: #030059
+
+Colors from dark to light:
+ R   G   B 
+019 083 171
+021 106 222
+025 110 224
+041 132 255
+087 158 255

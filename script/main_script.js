@@ -10,7 +10,8 @@ var root = "http://localhost/MeHome/public_html/";
 
 //On loand, we load the home page.
 window.onload = function(){
-    LoadPage("views/Home.xhtml", []);
+    SetMenuItems();
+    LoadPage("views/Home.xhtml");
 };
 
 //Continuously check if the current page has content to load
@@ -228,5 +229,24 @@ function PostRequest(path, params){
     };
     
     xhr.send(params);
+}
+
+function SelectThis(item){
+    var oldItem = document.getElementsByClassName("mi_active");
+    if(oldItem){
+        oldItem[0].className = oldItem[0].className.replace("mi_active", "");
+    }
+    item.className += " mi_active";
+}
+
+function SetMenuItems(){
+    var menuItems = document.getElementsByClassName("menu_item");
+    
+    for(var i = 0; i < menuItems.length; i++){
+        menuItems[i].onclick = function(){
+            LoadPage(this.getAttribute("page"));
+            SelectThis(this);
+        }
+    }
 }
 
