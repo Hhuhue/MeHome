@@ -63,7 +63,7 @@ function DeleteTask(id){
     var path = root + "controllers/TaskController.php";
     
     PostRequest(path, request);
-    LoadPage("views/Tasks.xhtml", []);
+    LoadPage("views/Tasks.xhtml");
 }
 
 /**
@@ -142,5 +142,6 @@ function CompleteTask(id){
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
     var path = root + "controllers/TaskController.php";
     
-    PostRequest(path, request); 
+    PostRequest(path, request);
+    LoadPage("views/Tasks.xhtml"); 
 }

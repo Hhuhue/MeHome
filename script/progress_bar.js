@@ -13,10 +13,10 @@ function loadBar(id){
     var dim = 15;
     
     ctx.clearRect(0, 0, canva.width, canva.height);
-    canva.width = dim * size + dim;
+    canva.width = dim * size;
     canva.height = dim;
     for(var i = 0; i < size; i++){
-        cubeStep(ctx, {"x": dim * (i + 1), "y": 0}, dim, i < filled);
+        cubeStep(ctx, {"x": dim * i, "y": 0}, dim, i < filled);
     }
 }
 

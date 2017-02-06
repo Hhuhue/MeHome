@@ -52,23 +52,23 @@ html{
     position: fixed;
 }
 
-.menu_item{
-    width: 100%;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    color: #ffffff;
-    font-size: 12pt;
+.menu_header{
+    width: 12em; 
+    height: 10em;
+    margin: 1em;
 }
 
 .menu_tabs{
-    margin-top: 14em;
+    margin-top: 2em;
 }
 
-.mi_1{
-    background-color: #040073;
-}
-
-.mi_2{
+.menu_item{
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    color: white;
+    font-size: 12pt;
+    border-bottom: 1px solid #030059;
     background-color: rgb(019, 083, 171);
 }
 
@@ -79,7 +79,7 @@ html{
 
 .menu_item span{
     color: #ffffff;
-    padding-left: 10px;
+    padding-left: 1em;
 }
 
 .menu_item:hover{
@@ -91,18 +91,17 @@ html{
 }
 
 /* Table style */
-.table_head_1 {
+.table_head {
     color: white;
-    border-radius: 7px 7px 0px 0px;
-    background-color: rgb(021, 106, 222);
-    padding: 0.5em 2em 0.5em 2em;
+    background-color: #040073;
+    padding-bottom: 0.5em;
     text-align: center;
     font-weight: bold;
 }
 
-.table_head_2 {
-    color: white;
-    background-color: #73D176;
+.table_header{
+    border-bottom: 0.5em solid #040073;
+    border-right: 1.5em solid transparent;
 }
 
 .table{
@@ -195,6 +194,17 @@ html{
 
 .input:focus{
     outline: none;
+}
+
+/* Bar style */
+
+.bar_container > i{
+    color: #5EC78A;
+    cursor: pointer;
+}
+
+.bar_container > i:active{
+    color: #50b279;
 }
 
 /* Other styles */
