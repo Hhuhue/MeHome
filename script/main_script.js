@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 
-//The number of attempts to load the content of a page
+//The number of attempts to load the content of a page.
 var ticks = 100;
 var root = "http://localhost/MeHome/public_html/";
 
-//On loand, we load the home page.
+//On load, we load the home page and set the menu items
 window.onload = function(){
     SetMenuItems();
     LoadPage("views/Home.xhtml");
 };
 
-//Continuously check if the current page has content to load
+//Continuously check if the current page has dynamic content to load.
 setInterval(ContentLoader, 20);
 
 /**
@@ -31,6 +31,9 @@ function ContentLoader(){
         }
         else if(document.getElementsByName("bar").length !== 0){
             ShowBars();  
+        }
+        else if(document.getElementsByName("pagination").length !== 0){
+            Paginate();  
         }
         UpdateSelects();
         ticks--;
@@ -52,7 +55,7 @@ function LoadPage(ref, data){
 
         if(data !== undefined){
             for(var i = 0; i < data.length; i++){
-                allText = replaceAll(allText, params[i]["info"], data[i]["value"]);                
+                allText = ReplaceAll(allText, params[i]["info"], data[i]["value"]);                
             }                  
         }          
 
@@ -62,6 +65,42 @@ function LoadPage(ref, data){
     GetRequest(ref, action);
     
     ticks = 100;
+}
+
+function Paginate(){
+    var paginations = document.getElementsByName("pagination");
+
+    for (var t = 0; t < paginations.length; t++){
+        var pagination = paginations[t];
+        
+        var element = pagination.getAttribute("element");
+        var from = pagination.getAttribute("from");  
+        var display = parseInt(pagination.getAttribute("display"));
+        var html = pagination.innerHTML;
+        var requestData = {};
+        
+        if(pagination.hasAttribute("cndt")){
+            var condition = pagination.getAttribute("cndt").split(":");
+            requestData = {"attr" : condition[0], "value": parseInt(condition[1])};
+        };
+        
+        var request = "?op=5&file=" + from + "&table=" + element + "&cndt=" + JSON.stringify(requestData);
+        var keys = {"pagination" : pagination, "html": html, "display": display};
+        
+        var action = function(count, params = keys){
+            var element = params["pagination"];
+            element.innerHTML = "";
+            
+            for (var i = 1; i < (count / params["display"]) + 1; i++){               
+                element.innerHTML = element.innerHTML + ReplaceAll(params["html"], "i", i);
+            }
+            
+            params["pagination"].setAttribute("name", "pagination_complete");
+        };
+        
+        
+        GetRequest(root + "/controllers/Controller.php" + request, action);
+    }
 }
 
 /**
@@ -80,9 +119,9 @@ function ExecuteFor(){
         loop.innerHTML = "";
 
         for (; i < to; i++){
-            loop.innerHTML = loop.innerHTML + replaceAll(html, "i", i);
-            loop.setAttribute("name", "for_complete");
+            loop.innerHTML = loop.innerHTML + ReplaceAll(html, "i", i);
         }
+        loop.setAttribute("name", "for_complete");
     }
 }
 /**
@@ -95,29 +134,36 @@ function ExecuteForEach(){
     for (var t = 0; t < loops.length; t++){
         var element = loops[t].getAttribute("element");
         var from = loops[t].getAttribute("from");
-        var data = loops[t].getAttribute("data").split(",");
-        var condition = loops[t].getAttribute("condition").split(":");
-        
+        var data = loops[t].getAttribute("data").split(",");        
         var html = loops[t].innerHTML;
-        var cndt = {"attr" : condition[0], "value": parseInt(condition[1])};
+        var requestData = {};
         
-        var request = "?op=0&file=" + from + "&table=" + element + "&cndt=" + JSON.stringify(cndt);
+        if(loops[t].hasAttribute("cndt")){
+            var condition = loops[t].getAttribute("cndt").split(":");
+            requestData["cndt"] = {"attr" : condition[0], "value": parseInt(condition[1])};
+        };
+        
+        if(loops[t].hasAttribute("display")){            
+            var display = loops[t].getAttribute("display").split(":");
+            requestData["display"] = {"page" : parseInt(display[0]), "count": parseInt(display[1])};
+        }
+        
+        var request = "?op=0&file=" + from + "&table=" + element + "&data=" + JSON.stringify(requestData);
         var keys = {"loop" : loops[t], "data": data, "element": element, "html": html};
         
-        var action = function(json, params = keys){            
+        var action = function(json, params = keys){
             var parsedJson = JSON.parse(json);
-            
             for(var i = 0; i < parsedJson.length; i++){
                 var rawData = params["html"];
 
                 for (var j = 0; j < params["data"].length; j++){
-                    rawData = replaceAll(rawData, params["data"][j], parsedJson[i][params["data"][j]]);
+                    rawData = ReplaceAll(rawData, params["data"][j], parsedJson[i][params["data"][j]]);
                 }
                 params["loop"].innerHTML = params["loop"].innerHTML + rawData;
             }
         };
         
-        GetRequest(root + "/controllers/TaskController.php" + request, action);
+        GetRequest(root + "/controllers/Controller.php" + request, action);
         
         loops[t].innerHTML = "";       
         loops[t].setAttribute("name", "foreach_complete");
@@ -144,7 +190,7 @@ function ShowBars(){
  * @param {String} replacement - The value of the text to replace the searched value with
  * @returns {String} The <tt>string</tt> with <tt>searched</tt> replaced
  */
-function replaceAll(string, searched, replacement){
+function ReplaceAll(string, searched, replacement){
     var result = string;
     
     while(result.search("%" + searched + "%") !== -1){
@@ -191,7 +237,13 @@ function GetRequest(path, action){
         if(xhr.readyState === XMLHttpRequest.DONE)
         {
             if(xhr.status === 200){
-                action(xhr.responseText);
+                var response = xhr.responseText;
+                if(response.search("<br />") !== -1){
+                    document.getElementById("content").innerHTML = response;
+                } else {
+                    action(response);                
+                }
+            
             } else {
                 console.error(xhr);
             }
@@ -231,6 +283,11 @@ function PostRequest(path, params){
     xhr.send(params);
 }
 
+/**
+ * Adds the mi_active to the selected menu item.
+ * @param {Object} item - The selectedmenu item
+ * @returns {undefined}
+ */
 function SelectThis(item){
     var oldItem = document.getElementsByClassName("mi_active");
     if(oldItem){
@@ -239,14 +296,23 @@ function SelectThis(item){
     item.className += " mi_active";
 }
 
+/**
+ * Sets the onclick property of each menu item.
+ * @returns {undefined}
+ */
 function SetMenuItems(){
     var menuItems = document.getElementsByClassName("menu_item");
     
     for(var i = 0; i < menuItems.length; i++){
         menuItems[i].onclick = function(){
-            LoadPage(this.getAttribute("page"));
+            LoadPage(this.getAttribute("page"), [{"info": "page", "value": 1}]);
             SelectThis(this);
-        }
+        };
     }
+}
+
+function setPage(page, view){
+    var data = [{"info": "page", "value": page}];
+    LoadPage(view, data);
 }
 

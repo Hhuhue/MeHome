@@ -7,10 +7,13 @@ if(isset($_GET['op'])){
     $bd = new Database($_GET['file']);
     switch ($_GET['op']){
         case Operation::GetAll :
-            echo $bd->getAll($_GET['table'], $_GET['cndt']); 
+            echo $bd->getAll($_GET['table'], $_GET['data']); 
             break;
         case Operation::Get : 
             echo $bd->getById($_GET['table'], $_GET['id']); 
+            break;
+        case Operation::Count : 
+            echo $bd->getCount($_GET['table'], $_GET['cndt']); 
             break;
 
         default:

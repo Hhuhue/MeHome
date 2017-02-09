@@ -6,6 +6,7 @@ abstract class Operation{
     const Update = 2;
     const Delete = 3;
     const Add = 4;
+    const Count = 5;
 }
 
 class Database{
@@ -17,19 +18,56 @@ class Database{
         $this->file = $database;
     }
     
-    public function getAll($table, $condition){
+    public function getAll($table, $params){
         $entries = $this->getEntries($table);
-        $filter = json_decode($condition, true);
-        $filteredEntries = array();
+        $data = json_decode($params, true);
         
-        foreach($entries as $entry){
-            if($entry[$filter["attr"]] === $filter["value"]){
-                array_push($filteredEntries, $entry);
+        if(isset($data['cndt'])){  
+            $filter = $data['cndt'];  
+            $filteredEntries = array();        
+            foreach($entries as $entry){
+                if($entry[$filter["attr"]] === $filter["value"]){
+                    array_push($filteredEntries, $entry);
+                }
             }
+            
+            $entries = $filteredEntries;
         }
         
-        return (string)json_encode($filteredEntries);
+        if(isset($data['display'])){
+            $display = $data['display'];
+            $startIndex = ($display['page'] - 1) * $display['count'];
+            $entriesToKeep = array();               
+           
+            for($i = $startIndex; $i < ($startIndex + $display['count']) && $i < count($entries); $i++){
+                    array_push($entriesToKeep, $entries[$i]);
+            }
+            
+            $entries = $entriesToKeep;
+        }
+        
+        
+        return (string)json_encode($entries);
     }
+    
+    public function getCount($table, $conditions){
+        $entries = $this->getEntries($table);
+        $filter = json_decode($conditions, true);
+        
+        if(isset($filter)){    
+            $filteredEntries = array();   
+            
+            foreach($entries as $entry){
+                if($entry[$filter["attr"]] === $filter["value"]){
+                    array_push($filteredEntries, $entry);
+                }
+            }
+            
+            $entries = $filteredEntries;
+        }
+        
+        return count($entries);
+    } 
     
     public function getById($table, $id){
         $entries = $this->getEntries($table);

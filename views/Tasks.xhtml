@@ -11,14 +11,14 @@
                     <td><div class="table_header"></div><div class="table_head">&nbsp;</div></td>
                 </tr>
             </thead>
-            <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight" condition="completed:0">
+            <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight" cndt="completed:0" display="%page%:5">
                 <tr>
                     <td><span class="text_cell">%description%</span></td>
                     <td class="no_select" style="text-align: center;">
                         <div class='bar_container'>
-                            <i class="fa fa-minus-square" onclick="removeToBar('progress_bar_%id%')"></i>
+                            <i class="fa fa-minus-square" onclick="removeProgress('progress_bar_%id%')"></i>
                             <span><canvas id="progress_bar_%id%" data="size:%weight%,filled:%progress%" height="15" name="bar"></canvas></span>
-                            <i class="fa fa-plus-square" onclick="addToBar('progress_bar_%id%')"></i>                            
+                            <i class="fa fa-plus-square" onclick="addProgress('progress_bar_%id%')"></i>                            
                         </div>
                     </td>
                     <td><span class="text_cell">%date%</span></td>
@@ -31,7 +31,10 @@
                     </td>
                 </tr>
             </tbody>
-        </table>        
+        </table>  
+        <div name="pagination" element="Tasks" from="tasks.json" cndt="completed:0" display="5" for="tasks">
+            <span class='button btn_submit' onclick='setPage(%i%, "views/Tasks.xhtml")'>%i%</span>
+        </div>
         <span class="button btn_submit" onclick="LoadPage('views/AddTask.xhtml')" style="margin-top: 1em">Ajouter</span>
         <span class="button btn_edit" onclick="UpdateTasks()" style="margin-top: 1em">Sauvegarder les progressions</span>
     </div>

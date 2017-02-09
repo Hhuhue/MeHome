@@ -23,7 +23,7 @@ function AddTask(){
     };
     
     var request = "op=4&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
-    var path = root + "controllers/TaskController.php";
+    var path = root + "controllers/Controller.php";
 
     PostRequest(path, request);
 }
@@ -48,7 +48,7 @@ function UpdateTasks(){
         }
     }
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(barsToUpdate);
-    var path = root + "controllers/TaskController.php";
+    var path = root + "controllers/Controller.php";
     
     PostRequest(path, request); 
 }
@@ -60,7 +60,7 @@ function UpdateTasks(){
  */
 function DeleteTask(id){    
     var request = "op=3&file=tasks.json&table=Tasks&id=" + id;
-    var path = root + "controllers/TaskController.php";
+    var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
     LoadPage("views/Tasks.xhtml");
@@ -101,7 +101,7 @@ function EditTaskGet(id){
         }
     };
     
-    xhr.open("GET", root + "controllers/TaskController.php?" + request, true);
+    xhr.open("GET", root + "controllers/Controller.php?" + request, true);
     xhr.send();
 }
 
@@ -125,7 +125,7 @@ function EditTaskPost(id){
     }];
     
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
-    var path = root + "controllers/TaskController.php";
+    var path = root + "controllers/Controller.php";
 
     PostRequest(path, request);
 }
@@ -140,7 +140,7 @@ function CompleteTask(id){
     var modif = [{"id": id, "completed": 1}];
     
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
-    var path = root + "controllers/TaskController.php";
+    var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
     LoadPage("views/Tasks.xhtml"); 
