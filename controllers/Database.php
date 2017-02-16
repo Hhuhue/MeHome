@@ -21,7 +21,7 @@ class Database{
     public function getAll($table, $params){
         $entries = $this->getEntries($table);
         $data = json_decode($params, true);
-        
+        $this->dump($params);
         if(isset($data['cndt'])){  
             $filter = $data['cndt'];  
             $filteredEntries = array();        

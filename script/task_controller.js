@@ -26,6 +26,7 @@ function AddTask(){
     var path = root + "controllers/Controller.php";
 
     PostRequest(path, request);
+    LoadPage('views/Tasks.xhtml', [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -55,7 +56,7 @@ function UpdateTasks(){
 
 /**
  * Deletes the specified task from the database.
- * @param {Number} id- The id of the task to delete
+ * @param {Number} id - The id of the task to delete
  * @returns {undefined}
  */
 function DeleteTask(id){    
@@ -63,7 +64,7 @@ function DeleteTask(id){
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/Tasks.xhtml");
+    LoadPage("views/Tasks.xhtml", [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -127,7 +128,8 @@ function EditTaskPost(id){
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
     var path = root + "controllers/Controller.php";
 
-    PostRequest(path, request);
+    PostRequest(path, request); 
+    LoadPage('views/Tasks.xhtml', [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -143,5 +145,5 @@ function CompleteTask(id){
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/Tasks.xhtml"); 
+    LoadPage("views/Tasks.xhtml", [{"info": "page", "value": 1}]); 
 }
