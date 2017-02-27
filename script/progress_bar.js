@@ -43,7 +43,7 @@ function addUnit(ctx, position, dimension, filled){
     }
     
     ctx.beginPath();
-     ctx.rect(position["x"], position["y"], dimension, dimension);
+    ctx.rect(position["x"], position["y"], dimension, dimension);
     ctx.strokeStyle = "rgba(019, 083, 171, 1)";
     ctx.stroke();
     ctx.closePath();
