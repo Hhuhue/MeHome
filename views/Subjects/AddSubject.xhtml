@@ -1,0 +1,19 @@
+<div>
+    <h1>Ajouter Un Sujet</h1>
+    <div class="content">
+        <hr/>        
+        <div class="form_section">
+            <label for="parent">Sujet parent :</label>
+            <select name="foreach" element="Tasks" from="tasks.json" data="id,name" cndt="active:1" id="parent" class="input">
+                <option value="%id%">%name%</option>
+            </select>
+        </div>
+        <div class="form_section">
+            <label for="name"> Nom:</label>
+            <input id="name" type="text" placeholder="Nom" class="input"/>
+        </div> 
+        <div class="form_section">
+            <span class="button btn_submit" onclick="AddSubject();">Ajouter</span>
+        </div>  
+    </div>  
+</div>

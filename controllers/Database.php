@@ -21,12 +21,11 @@ class Database{
     public function getAll($table, $params){
         $entries = $this->getEntries($table);
         $data = json_decode($params, true);
-        $this->dump($params);
         if(isset($data['cndt'])){  
             $filter = $data['cndt'];  
             $filteredEntries = array();        
             foreach($entries as $entry){
-                if($entry[$filter["attr"]] === $filter["value"]){
+                if(isset($entry[$filter["attr"]]) && $entry[$filter["attr"]] === $filter["value"]){
                     array_push($filteredEntries, $entry);
                 }
             }
@@ -109,7 +108,7 @@ class Database{
         
         $newEntry = '{ "id": ' . ($id + 1);
         foreach(array_keys($infos) as $info){
-            $newEntry = $newEntry . ',"' . $info . '": ' . $infos[$info];
+            $newEntry = $newEntry . ',"' . $info . '": ' . (($infos[$info] == '') ? 'null' : $infos[$info]);
         }
         $newEntry = $newEntry . '}';
         

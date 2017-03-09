@@ -1,0 +1,29 @@
+<div>
+    <h1>Sujets</h1>
+    <div class="content">
+        <hr/>
+        <table cellspacing="0" cellpadding="0" class="table" style="width: 90%">
+            <thead>
+                <tr>
+                    <td><div class="table_header"></div><div class="table_head">Nom</div></td>           
+                    <td><div class="table_header"></div><div class="table_head">&nbsp;</div></td>
+                </tr>
+            </thead>
+            <tbody name="foreach" element="Subjects" from="subjects.json" data="name,id" cndt="active:1" display="%page%:5">
+                <tr>
+                    <td><span class="text_cell">%name%</span></td>
+                    <td class="no_select">
+                        <span>
+                            <span class="button btn_edit" onclick="EditSubjectGet(%id%)">Modifer</span>
+                            <span class="button btn_delete" onclick="DeleteSubject(%id%)">Supprimer</span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>  
+        <div name="pagination" element="Subjects" from="subjects.json" cndt="active:1" display="5">
+            <span class='button btn_submit' onclick='setPage(%i%, "views/Subjects/Subjects.xhtml")'>%i%</span>
+        </div>
+        <span class="button btn_submit" onclick="LoadPage('views/Subjects/AddSubject.xhtml')" style="margin-top: 1em">Ajouter</span>
+    </div>
+</div>

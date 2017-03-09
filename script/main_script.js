@@ -271,7 +271,7 @@ function PostRequest(path, params){
                 if(response.search('<br />') !== -1){
                     document.getElementById('content').innerHTML = response;
                 } else {
-                    alert(xhr.responseText);                    
+                    alert(response);                    
                 }
 
             } else {

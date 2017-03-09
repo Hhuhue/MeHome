@@ -1,0 +1,19 @@
+<div>
+    <h1>Modifier Un Sujet</h1>
+    <div class="content">
+        <hr/>        
+        <div class="form_section">
+            <label for="desc">Sujet parent :</label>
+            <select name="foreach" data="id,name" in="%parent_ids%" value="%parent_id%" class="input">
+                <option value="%id%">%name%</option>
+            </select>
+        </div>
+        <div class="form_section">
+            <label for="score"> Nom:</label>
+            <input type="text" placeholder="Nom" value="%name%" class="input"/>
+        </div> 
+        <div class="form_section">
+            <span class="button btn_submit" onclick="EditSubjectPost(%subject_id%);">Sauvegarder</span>
+        </div>  
+    </div>  
+</div>

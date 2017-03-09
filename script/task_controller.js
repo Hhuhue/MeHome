@@ -1,8 +1,5 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+var folder = 'Tasks/';
 
 /**
  * Adds a new task in the database.
@@ -26,7 +23,7 @@ function AddTask(){
     var path = root + "controllers/Controller.php";
 
     PostRequest(path, request);
-    LoadPage('views/Tasks.xhtml', [{"info": "page", "value": 1}]);
+    LoadPage('views/'+ folder + 'Tasks.xhtml', [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -64,7 +61,7 @@ function DeleteTask(id){
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/Tasks.xhtml", [{"info": "page", "value": 1}]);
+    LoadPage("views/" + folder + "Tasks.xhtml", [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -93,7 +90,7 @@ function EditTaskGet(id){
                         {"info": "date", "value": json["date"]},
                         {"info": "task_id", "value": json["id"]}
                     ];
-                    LoadPage("views/EditTask.xhtml", data);                   
+                    LoadPage("views/" + folder + "EditTask.xhtml", data);                   
                 }    
                                
             } else {
@@ -129,7 +126,7 @@ function EditTaskPost(id){
     var path = root + "controllers/Controller.php";
 
     PostRequest(path, request); 
-    LoadPage('views/Tasks.xhtml', [{"info": "page", "value": 1}]);
+    LoadPage('views/' + folder + 'Tasks.xhtml', [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -145,5 +142,5 @@ function CompleteTask(id){
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/Tasks.xhtml", [{"info": "page", "value": 1}]); 
+    LoadPage("views/" + folder + "Tasks.xhtml", [{"info": "page", "value": 1}]); 
 }
