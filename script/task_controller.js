@@ -1,6 +1,42 @@
 
 var folder = 'Tasks/';
 
+var task_controller = {
+    "folder": folder,
+    "index": function(page, count){ Tasks(page, count); },
+    "add": function(){ AddTask(); },
+    "update": function(){ UpdateTasks(); },
+    "edit_get": function(id){ EditTaskGet(id); },
+    "edit_post": function(id){ EditTaskPost(id); },
+    "complete": function(id) { CompleteTask(id); }
+};
+
+function Tasks(page, count){
+    var params = {"page": page, "count": count};
+    var data = {"cndt": {"attr": "completed", "value": 0}};
+    
+    var path = root + "controllers/Controller.php";
+    var request = "?op=0&file=tasks.json&table=Tasks&data=" + JSON.stringify(data);
+    
+    var action = function(json, keys = params) {
+        var allTasks = JSON.parse(json);
+        var count = allTasks.length;
+        var startIndex = (keys["page"] - 1) * keys["count"];
+        var pageDataKeys = ["id", "name", "..."];
+        var data = [
+            {"info": "page_data", "value": {}},
+            {"info": "pagination", "value": {}}
+        ];
+        
+        
+        for(var i = startIndex; i < keys["page"] * keys["count"]; i++){
+            
+        }
+    };
+    
+    GetRequest(path + request, action);
+}
+
 /**
  * Adds a new task in the database.
  * @returns {undefined}

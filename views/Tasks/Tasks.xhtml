@@ -11,7 +11,7 @@
                     <td><div class="table_header"></div><div class="table_head">&nbsp;</div></td>
                 </tr>
             </thead>
-            <tbody name="foreach" element="Tasks" from="tasks.json" data="description,progress,id,date,weight" cndt="completed:0" display="%page%:5">
+            <tbody name="foreach" data="%page_data%">
                 <tr>
                     <td><span class="text_cell">%description%</span></td>
                     <td class="no_select" style="text-align: center;">
@@ -32,8 +32,8 @@
                 </tr>
             </tbody>
         </table>  
-        <div name="pagination" element="Tasks" from="tasks.json" cndt="completed:0" display="5" for="tasks">
-            <span class='button btn_submit' onclick='setPage(%i%, "views/Tasks/Tasks.xhtml")'>%i%</span>
+        <div name="foreach" data="%pagination%">
+            <span class='button btn_submit' onclick='task_controller["index"](%page%, 5)'>%i%</span>
         </div>
         <span class="button btn_submit" onclick="LoadPage('views/Tasks/AddTask.xhtml')" style="margin-top: 1em">Ajouter</span>
         <span class="button btn_edit" onclick="UpdateTasks()" style="margin-top: 1em">Sauvegarder les progressions</span>

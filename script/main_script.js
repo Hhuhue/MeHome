@@ -10,7 +10,6 @@ var root = "http://localhost/MeHome/public_html/";
 
 //On load, we load the home page and set the menu items
 window.onload = function(){
-    SetMenuItems();
     LoadPage("views/Home.xhtml");
 };
 
@@ -53,54 +52,18 @@ function LoadPage(ref, data){
     var action = function(allText, params = data){
         var container = document.getElementById("content");
 
-        if(data !== undefined){
+        if(params !== undefined){
             for(var i = 0; i < data.length; i++){
-                allText = ReplaceAll(allText, params[i]["info"], data[i]["value"]);                
+                allText = ReplaceAll(allText, params[i]["info"], params[i]["value"]);                
             }                  
         }          
 
         container.innerHTML = allText;
-    }
+    };
     
     GetRequest(ref, action);
     
     ticks = 100;
-}
-
-function Paginate(){
-    var paginations = document.getElementsByName("pagination");
-
-    for (var t = 0; t < paginations.length; t++){
-        var pagination = paginations[t];
-        
-        var element = pagination.getAttribute("element");
-        var from = pagination.getAttribute("from");  
-        var display = parseInt(pagination.getAttribute("display"));
-        var html = pagination.innerHTML;
-        var requestData = {};
-        
-        if(pagination.hasAttribute("cndt")){
-            var condition = pagination.getAttribute("cndt").split(":");
-            requestData = {"attr" : condition[0], "value": parseInt(condition[1])};
-        };
-        
-        var request = "?op=5&file=" + from + "&table=" + element + "&cndt=" + JSON.stringify(requestData);
-        var keys = {"pagination" : pagination, "html": html, "display": display};
-        
-        var action = function(count, params = keys){
-            var element = params["pagination"];
-            element.innerHTML = "";
-            
-            for (var i = 1; i < (count / params["display"]) + 1; i++){               
-                element.innerHTML = element.innerHTML + ReplaceAll(params["html"], "i", i);
-            }
-            
-            params["pagination"].setAttribute("name", "pagination_complete");
-        };
-        
-        
-        GetRequest(root + "/controllers/Controller.php" + request, action);
-    }
 }
 
 /**
@@ -132,40 +95,22 @@ function ExecuteForEach(){
     var loops = document.getElementsByName("foreach");
     
     for (var t = 0; t < loops.length; t++){
-        var element = loops[t].getAttribute("element");
-        var from = loops[t].getAttribute("from");
-        var data = loops[t].getAttribute("data").split(",");        
+        var data = JSON.parse(loops[t].getAttribute("data"));
+        var keys = data["keys"];
         var html = loops[t].innerHTML;
-        var requestData = {};
         
-        if(loops[t].hasAttribute("cndt")){
-            var condition = loops[t].getAttribute("cndt").split(":");
-            requestData["cndt"] = {"attr" : condition[0], "value": parseInt(condition[1])};
-        };
+        data = data["data"];
+        loops[t].innerHTML = "";   
         
-        if(loops[t].hasAttribute("display")){            
-            var display = loops[t].getAttribute("display").split(":");
-            requestData["display"] = {"page" : parseInt(display[0]), "count": parseInt(display[1])};
-        }
-        
-        var request = "?op=0&file=" + from + "&table=" + element + "&data=" + JSON.stringify(requestData);
-        var keys = {"loop" : loops[t], "data": data, "element": element, "html": html};
-        
-        var action = function(json, params = keys){
-            var parsedJson = JSON.parse(json);
-            for(var i = 0; i < parsedJson.length; i++){
-                var rawData = params["html"];
-
-                for (var j = 0; j < params["data"].length; j++){
-                    rawData = ReplaceAll(rawData, params["data"][j], parsedJson[i][params["data"][j]]);
-                }
-                params["loop"].innerHTML = params["loop"].innerHTML + rawData;
+        for(var i = 0; i < data.length; i++){
+            var content = html;
+            for(var j = 0; j < keys.length; j++){
+                console.log("replacing key " + keys[j])
+                content = ReplaceAll(content, keys[j], data[i][keys[j]]);             
             }
-        };
-        
-        GetRequest(root + "/controllers/Controller.php" + request, action);
-        
-        loops[t].innerHTML = "";       
+            loops[t].innerHTML += content;  
+        }
+            
         loops[t].setAttribute("name", "foreach_complete");
     }
 }
@@ -224,13 +169,13 @@ function UpdateSelects(){
 
 /**
  * Executes a XMLHttpRequest of type GET
- * @param {String} path - The path to the targeted file
- * @param {type} action - The function to execute on success
+ * @param {String} resquest - The html GET request string
+ * @param {Function} action - The function to execute on success
  * @returns {undefined}
  */
-function GetRequest(path, action){
+function GetRequest(request, action){
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", path, true);
+    xhr.open("GET", request, true);
     
     xhr.onreadystatechange = function ()
     {
@@ -242,8 +187,7 @@ function GetRequest(path, action){
                     document.getElementById("content").innerHTML = response;
                 } else {
                     action(response);                
-                }
-            
+                }            
             } else {
                 console.error(xhr);
             }
@@ -294,21 +238,6 @@ function SelectThis(item){
         oldItem[0].className = oldItem[0].className.replace("mi_active", "");
     }
     item.className += " mi_active";
-}
-
-/**
- * Sets the onclick property of each menu item.
- * @returns {undefined}
- */
-function SetMenuItems(){
-    var menuItems = document.getElementsByClassName("menu_item");
-    
-    for(var i = 0; i < menuItems.length; i++){
-        menuItems[i].onclick = function(){
-            LoadPage(this.getAttribute("page"), [{"info": "page", "value": 1}]);
-            SelectThis(this);
-        };
-    }
 }
 
 function setPage(page, view){

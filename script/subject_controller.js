@@ -108,9 +108,8 @@ function EditSubjectPost(id){
 }
 
 function GetParentIds(id){
-    var request = "op=0&file=" + dataFile + "&table=" + dataTable + '&cndt={"cndt":{"attr":"active","value":1}}';
+    var request = root + "controllers/Controller.php?op=0&file=" + dataFile + "&table=" + dataTable + '&data={"cndt":{"attr":"active","value":1}}';
     var responseData = GetRequest(request);
     alert(responseData);
-    return responseData;
-    
+    return responseData;    
 }

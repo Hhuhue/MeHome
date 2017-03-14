@@ -20,10 +20,13 @@
                 <img src="resources/house-logo-hi.png" alt="Menu header" class="menu_header"/>
             </div>
             <div class="menu_tabs">
-                <div class="menu_item mi_active" page="views/Home.xhtml">
-                    <span><i class="fa fa-home" style="margin-right: 0.5em;"></i>Accueil</span>
+                <div class="menu_item mi_active">
+                    <span>
+                        <i class="fa fa-home" style="margin-right: 0.5em;"></i>
+                        Accueil
+                    </span>
                 </div>
-                <div class="menu_item" page="views/Tasks/Tasks.xhtml">
+                <div class="menu_item" onclick='task_controller["index"](1,5)'>
                     <span><i class="fa fa-list" style="margin-right: 0.5em;"></i>Mes Tâches</span>
                 </div>
                 <div class="menu_item" page="views/Subjects/Subjects.xhtml">
