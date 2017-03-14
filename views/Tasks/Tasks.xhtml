@@ -11,7 +11,7 @@
                     <td><div class="table_header"></div><div class="table_head">&nbsp;</div></td>
                 </tr>
             </thead>
-            <tbody name="foreach" data="%page_data%">
+            <tbody name="foreach" data='%page_data%'>
                 <tr>
                     <td><span class="text_cell">%description%</span></td>
                     <td class="no_select" style="text-align: center;">
@@ -24,18 +24,18 @@
                     <td><span class="text_cell">%date%</span></td>
                     <td class="no_select">
                         <span>
-                            <span class="button btn_edit" onclick="EditTaskGet(%id%)">Modifer</span>
-                            <span class="button btn_delete" onclick="DeleteTask(%id%)">Supprimer</span>
-                            <span class="button btn_submit" onclick="CompleteTask(%id%)">Compléter</span>
+                            <span class="button btn_edit" onclick='task_controller["edit_get"](%id%)'>Modifer</span>
+                            <span class="button btn_delete" onclick='task_controller["delete"](%id%)'>Supprimer</span>
+                            <span class="button btn_submit" onclick='task_controller["complete"](%id%)'>Compléter</span>
                         </span>
                     </td>
                 </tr>
             </tbody>
         </table>  
-        <div name="foreach" data="%pagination%">
-            <span class='button btn_submit' onclick='task_controller["index"](%page%, 5)'>%i%</span>
+        <div name="foreach" data='%pagination%'>
+            <span class='button btn_submit' onclick='task_controller["index"](%page%, 5)'>%page%</span>
         </div>
-        <span class="button btn_submit" onclick="LoadPage('views/Tasks/AddTask.xhtml')" style="margin-top: 1em">Ajouter</span>
-        <span class="button btn_edit" onclick="UpdateTasks()" style="margin-top: 1em">Sauvegarder les progressions</span>
+        <span class="button btn_submit" onclick='task_controller["add_get"]()' style="margin-top: 1em">Ajouter</span>
+        <span class="button btn_edit" onclick='task_controller["update"]()' style="margin-top: 1em">Sauvegarder les progressions</span>
     </div>
 </div>

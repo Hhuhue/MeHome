@@ -53,7 +53,7 @@ function LoadPage(ref, data){
         var container = document.getElementById("content");
 
         if(params !== undefined){
-            for(var i = 0; i < data.length; i++){
+            for(var i = 0; i < data.length; i++){                
                 allText = ReplaceAll(allText, params[i]["info"], params[i]["value"]);                
             }                  
         }          
@@ -105,7 +105,6 @@ function ExecuteForEach(){
         for(var i = 0; i < data.length; i++){
             var content = html;
             for(var j = 0; j < keys.length; j++){
-                console.log("replacing key " + keys[j])
                 content = ReplaceAll(content, keys[j], data[i][keys[j]]);             
             }
             loops[t].innerHTML += content;  

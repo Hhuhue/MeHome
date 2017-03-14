@@ -1,10 +1,9 @@
 
-var folder = 'Tasks/';
-
 var task_controller = {
-    "folder": folder,
+    "folder": 'views/Tasks/',
     "index": function(page, count){ Tasks(page, count); },
-    "add": function(){ AddTask(); },
+    "add_get": function() { AddTaskGet();},
+    "add_post": function(){ AddTaskPost(); },
     "update": function(){ UpdateTasks(); },
     "edit_get": function(id){ EditTaskGet(id); },
     "edit_post": function(id){ EditTaskPost(id); },
@@ -21,27 +20,29 @@ function Tasks(page, count){
     var action = function(json, keys = params) {
         var allTasks = JSON.parse(json);
         var count = allTasks.length;
-        var startIndex = (keys["page"] - 1) * keys["count"];
-        var pageDataKeys = ["id", "name", "..."];
         var data = [
-            {"info": "page_data", "value": {}},
-            {"info": "pagination", "value": {}}
-        ];
+            {"info": "page_data", "value": ""},
+            {"info": "pagination", "value": ""}
+        ];            
+              
+        data[0]["value"] = JSON.stringify(FormatTaskIndexData(allTasks, keys, count));
+        data[1]["value"] = JSON.stringify(GetTaskPagination(count, keys["count"]));
         
-        
-        for(var i = startIndex; i < keys["page"] * keys["count"]; i++){
-            
-        }
+        LoadPage(task_controller["folder"] + "Tasks.xhtml", data);
     };
     
     GetRequest(path + request, action);
+}
+
+function AddTaskGet(){
+    LoadPage(task_controller["folder"] + "AddTask.xhtml");
 }
 
 /**
  * Adds a new task in the database.
  * @returns {undefined}
  */
-function AddTask(){
+function AddTaskPost(){
     var description = document.getElementById("desc").value;
     var weight = parseInt(document.getElementById("score").value);
     var progress = parseInt(document.getElementById("comp").value);
@@ -59,7 +60,7 @@ function AddTask(){
     var path = root + "controllers/Controller.php";
 
     PostRequest(path, request);
-    LoadPage('views/'+ folder + 'Tasks.xhtml', [{"info": "page", "value": 1}]);
+    task_controller["index"](1,5);
 }
 
 /**
@@ -97,7 +98,7 @@ function DeleteTask(id){
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/" + folder + "Tasks.xhtml", [{"info": "page", "value": 1}]);
+    LoadPage("views/" + task_controller["folder"] + "Tasks.xhtml", [{"info": "page", "value": 1}]);
 }
 
 /**
@@ -126,7 +127,7 @@ function EditTaskGet(id){
                         {"info": "date", "value": json["date"]},
                         {"info": "task_id", "value": json["id"]}
                     ];
-                    LoadPage("views/" + folder + "EditTask.xhtml", data);                   
+                    LoadPage(task_controller["folder"] + "EditTask.xhtml", data);                   
                 }    
                                
             } else {
@@ -162,7 +163,7 @@ function EditTaskPost(id){
     var path = root + "controllers/Controller.php";
 
     PostRequest(path, request); 
-    LoadPage('views/' + folder + 'Tasks.xhtml', [{"info": "page", "value": 1}]);
+    task_controller["index"](1,5);
 }
 
 /**
@@ -170,13 +171,41 @@ function EditTaskPost(id){
  * @param {Number} id - The id of the completed task
  * @returns {undefined}
  */
-function CompleteTask(id){
-    
+function CompleteTask(id){    
     var modif = [{"id": id, "completed": 1}];
     
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
     var path = root + "controllers/Controller.php";
     
     PostRequest(path, request);
-    LoadPage("views/" + folder + "Tasks.xhtml", [{"info": "page", "value": 1}]); 
+    task_controller["index"](1,5);
+}
+
+function GetTaskPagination(elementCount, pageCount){
+    var pagination = [];
+        
+    do {
+        pagination.push({"page": pagination.length + 1});
+        elementCount -= pageCount;
+    } while (elementCount >= 0);
+    
+    return {"keys": ["page"], "data": pagination };
+}
+
+function FormatTaskIndexData(allTasks, keys, count){
+    var startIndex = (keys["page"] - 1) * keys["count"];
+    var pageDataKeys = ["id", "description", "progress", "weight", "date"];
+    var pageData = {"keys": pageDataKeys, "data": []};
+    
+    for(var i = startIndex; i < keys["page"] * keys["count"] && i < count; i++){
+        pageData["data"].push({
+            "id": allTasks[i]["id"],
+            "description": allTasks[i]["description"],
+            "progress": allTasks[i]["progress"],
+            "weight": allTasks[i]["weight"],
+            "date": allTasks[i]["date"]
+        });
+    }
+    
+    return pageData;
 }
