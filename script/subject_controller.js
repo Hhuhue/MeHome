@@ -1,27 +1,63 @@
-
-var folder = 'Subjects/';
-var dataFile = 'subjects.json';
-var dataTable = 'Subjects';
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
- * Adds a new task in the database.
+ * 
+ * @param {type} page
+ * @param {type} count
  * @returns {undefined}
  */
-function AddSubject(){
+function Subjects(page, count){
+    var params = {"page": page, "count": count};
+    var data = {"cndt": {"attr": "avtive", "value": 1}};
+    
+    var request = "?op=0&file=subjects.json&table=Subjects&data=" + JSON.stringify(data);
+    
+    var action = function(json, keys = params) {
+        var allSubjects = JSON.parse(json);
+        var data = [
+            {"info": "page_data", "value": ""},
+            {"info": "pagination", "value": ""}
+        ];            
+              
+        data[0]["value"] = JSON.stringify(FormatSubjectsIndexData(allSubjects, keys["page"], keys["count"]));
+        data[1]["value"] = JSON.stringify(GetPagination(allSubjects.length, keys["count"]));
+        
+        LoadPage(subject_controller["folder"] + "Tasks.xhtml", data);
+    };
+    
+    GetRequest(serverPath + request, action);
+}
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function AddSubjectGet(){
+    LoadPage(subject_controller["folder"] + 'AddSubject.xhtml');
+}
+
+/**
+ * Adds a new subject in the database.
+ * @returns {undefined}
+ */
+function AddSubjectPost(){
     var name = document.getElementById("name").value;
     var parentId = parseInt(document.getElementById("parent").value);
     
-    var json = {
+    var newSubject = {
         "name": '"' + name + '"',
         "parent_id": parentId,
         "active": 1
     };
     
-    var request = "op=4&file=" + dataFile + "&table=" + dataTable + "&data=" + JSON.stringify(json);
-    var path = root + "controllers/Controller.php";
-
-    PostRequest(path, request);
-    LoadPage('views/'+ folder + 'Subjects.xhtml', [{"info": "page", "value": 1}]);
+    var request = "op=4&file=subjects.json&table=Subjects&data=" + JSON.stringify(newSubject);
+    
+    PostRequest(serverPath, request); 
+    Subjects(1,5);
 }
 
 /**
@@ -30,86 +66,77 @@ function AddSubject(){
  * @returns {undefined}
  */
 function DeleteSubject(id){    
-    var path = root + "controllers/Controller.php";
-    
-    var json = [{
-        "id": id,
-        "active": 0
-    }];
+    var newState = [{"id": id, "active": 0}];
 
-    var request = "op=2&file=" + dataFile + "&table=" + dataTable + "&data=" + JSON.stringify(json);
+    var request = "op=2&file=subjects.json&table=Subjects&data=" + JSON.stringify(newState);
     
-    PostRequest(path, request);
-    LoadPage("views/" + folder + "Subjects.xhtml", [{"info": "page", "value": 1}]);
+    PostRequest(serverPath, request); 
+    Subjects(1,5);
 }
 
 /**
- * Load the task edition page with the informations of the task to edit.
- * @param {Number} id - The id of the task to edit
+ * Load the subject edition page with the informations of the subject to edit.
+ * @param {Number} id - The id of the subject to edit
  * @returns {undefined}
  */
 function EditSubjectGet(id){
-    var xhr = new XMLHttpRequest();
-    var request = "op=1&file=" + dataFile + "&table=" + dataTable + "&id=" + id;
+    var request = "?op=1&file=subjects.json&table=Subjects&id=" + id;
     
-    xhr.onreadystatechange = function()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                var response = xhr.responseText;
-                
-                if(response.search('<br />') !== -1){
-                    document.getElementById('content').innerHTML = response;
-                } else {
-                    var json = JSON.parse(xhr.responseText);
-                    var data = [
-                        {"info": "name", "value": json["name"]},
-                        {"info": "parent_id", "value": json["parent_id"]},
-                        {"info": "subject_id", "value": json["id"]},
-                        {"info": "parent_ids", "value": GetParentIds(json["id"])}
-                    ];
-                    LoadPage("views/" + folder + "EditSubject.xhtml", data);                   
-                }    
-                               
-            } else {
-                console.error(xhr);
-            }
-        }
+    var action = function(){
+        var json = JSON.parse(xhr.responseText);
+        var data = [
+            {"info": "name", "value": json["name"]},
+            {"info": "parent_id", "value": json["parent_id"]},
+            {"info": "subject_id", "value": json["id"]},
+            {"info": "parent_ids", "value": GetParentIds(json["id"])}
+        ];
+        
+        LoadPage(subject_controller["folder"] + "EditSubject.xhtml", data);   
     };
     
-    xhr.open("GET", root + "controllers/Controller.php?" + request, true);
-    xhr.send();
+    GetRequest(serverPath + request, action);
 }
 
 /**
- * Sends the changes of the edited task to the database.
- * @param {Number} id - The id of the edited task
+ * Sends the changes of the edited subject to the database.
+ * @param {Number} id - The id of the edited subject.
  * @returns {undefined}
  */
 function EditSubjectPost(id){
-    var description = document.getElementById("desc").value;
-    var weight = parseInt(document.getElementById("score").value);
-    var progress = parseInt(document.getElementById("comp").value);
-    var date = document.getElementById("date").value;
+    var name = document.getElementById("name").value;
+    var parentId = parseInt(document.getElementById("parent_id").value);
     
-    var json = [{
+    var editedSubject = [{
         "id": id,
-        "description": description,
-        "progress": progress,
-        "weight": weight,
-        "date": date
+        "name": name,
+        "parent_id": parentId
     }];
     
-    var request = "op=2&file=" + dataFile + "&table=" + dataTable + "&data=" + JSON.stringify(json);
-    var path = root + "controllers/Controller.php";
+    var request = "op=2&file=subjects.json&table=Subjects&data=" + JSON.stringify(editedSubject);  
 
-    PostRequest(path, request); 
-    LoadPage('views/' + folder + 'Subjects.xhtml', [{"info": "page", "value": 1}]);
+    PostRequest(serverPath, request);  
+    Subjects(1,5);
 }
 
-function GetParentIds(id){
-    var request = root + "controllers/Controller.php?op=0&file=" + dataFile + "&table=" + dataTable + '&data={"cndt":{"attr":"active","value":1}}';
-    var responseData = GetRequest(request);
-    alert(responseData);
-    return responseData;    
+/**
+ * Formats raw tasks informations so it can be displayed by the task index. 
+ * @param {Object} allSubjects - The raw tasks informations.
+ * @param {Number} subjectCount - The number of task displayed per page.
+ * @param {Number} pageCount - The number of the current page.
+ * @returns {Object} The formated information.
+ */
+function FormatSubjectIndexData(allSubjects, pageCount, subjectCount){
+    var startIndex = (pageCount - 1) * subjectCount;
+    var pageDataKeys = ["id", "name", "parent_name"];
+    var pageData = {"keys": pageDataKeys, "data": []};
+    
+    for(var i = startIndex; i < pageCount * subjectCount && i < allSubjects.length; i++){
+        pageData["data"].push({
+            "id": allSubjects[i]["id"],
+            "name": allSubjects[i]["name"],
+            "parent_name": allSubjects[i]["parent_name"]
+        });
+    }
+    
+    return pageData;
 }

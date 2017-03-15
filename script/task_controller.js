@@ -1,39 +1,42 @@
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-var task_controller = {
-    "folder": 'views/Tasks/',
-    "index": function(page, count){ Tasks(page, count); },
-    "add_get": function() { AddTaskGet();},
-    "add_post": function(){ AddTaskPost(); },
-    "update": function(){ UpdateTasks(); },
-    "edit_get": function(id){ EditTaskGet(id); },
-    "edit_post": function(id){ EditTaskPost(id); },
-    "complete": function(id) { CompleteTask(id); }
-};
-
+/**
+ * Shows all uncompleted tasks.
+ * @param {Number} page - The current display page number.
+ * @param {Number} count - The number of tasks displayed per page.
+ * @returns {undefined}
+ */
 function Tasks(page, count){
     var params = {"page": page, "count": count};
     var data = {"cndt": {"attr": "completed", "value": 0}};
     
-    var path = root + "controllers/Controller.php";
     var request = "?op=0&file=tasks.json&table=Tasks&data=" + JSON.stringify(data);
     
     var action = function(json, keys = params) {
         var allTasks = JSON.parse(json);
-        var count = allTasks.length;
+        
         var data = [
             {"info": "page_data", "value": ""},
             {"info": "pagination", "value": ""}
         ];            
               
-        data[0]["value"] = JSON.stringify(FormatTaskIndexData(allTasks, keys, count));
-        data[1]["value"] = JSON.stringify(GetTaskPagination(count, keys["count"]));
+        data[0]["value"] = JSON.stringify(FormatTaskIndexData(allTasks, keys["page"], keys["count"]));
+        data[1]["value"] = JSON.stringify(GetPagination(allTasks.length, keys["count"]));
         
         LoadPage(task_controller["folder"] + "Tasks.xhtml", data);
     };
     
-    GetRequest(path + request, action);
+    GetRequest(serverPath + request, action);
 }
 
+/**
+ * Shows the task creation form.
+ * @returns {undefined}
+ */
 function AddTaskGet(){
     LoadPage(task_controller["folder"] + "AddTask.xhtml");
 }
@@ -48,7 +51,7 @@ function AddTaskPost(){
     var progress = parseInt(document.getElementById("comp").value);
     var date = document.getElementById("date").value;
     
-    var json = {
+    var newTask = {
         "description": '"' + description + '"',
         "progress": progress,
         "weight": weight,
@@ -56,11 +59,10 @@ function AddTaskPost(){
         "completed": 0
     };
     
-    var request = "op=4&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
-    var path = root + "controllers/Controller.php";
+    var request = "op=4&file=tasks.json&table=Tasks&data=" + JSON.stringify(newTask);
 
-    PostRequest(path, request);
-    task_controller["index"](1,5);
+    PostRequest(serverPath, request);
+    Tasks(1,5);
 }
 
 /**
@@ -83,66 +85,47 @@ function UpdateTasks(){
         }
     }
     var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(barsToUpdate);
-    var path = root + "controllers/Controller.php";
     
-    PostRequest(path, request); 
+    PostRequest(serverPath, request); 
 }
 
 /**
  * Deletes the specified task from the database.
- * @param {Number} id - The id of the task to delete
+ * @param {Number} id - The id of the task to delete.
  * @returns {undefined}
  */
 function DeleteTask(id){    
     var request = "op=3&file=tasks.json&table=Tasks&id=" + id;
-    var path = root + "controllers/Controller.php";
     
-    PostRequest(path, request);
-    LoadPage("views/" + task_controller["folder"] + "Tasks.xhtml", [{"info": "page", "value": 1}]);
+    PostRequest(serverPath, request);
+    
+    Tasks(1,5);
 }
 
 /**
  * Load the task edition page with the informations of the task to edit.
- * @param {Number} id - The id of the task to edit
+ * @param {Number} id - The id of the task to edit.
  * @returns {undefined}
  */
 function EditTaskGet(id){
-    var xhr = new XMLHttpRequest();
     var request = "op=1&file=tasks.json&table=Tasks&id=" + id;
-    
-    xhr.onreadystatechange = function()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                var response = xhr.responseText;
-                
-                if(response.search('<br />') !== -1){
-                    document.getElementById('content').innerHTML = response;
-                } else {
-                    var json = JSON.parse(xhr.responseText);
-                    var data = [
-                        {"info": "description", "value": json["description"]},
-                        {"info": "progress", "value": json["progress"]},
-                        {"info": "weight", "value": json["weight"]},
-                        {"info": "date", "value": json["date"]},
-                        {"info": "task_id", "value": json["id"]}
-                    ];
-                    LoadPage(task_controller["folder"] + "EditTask.xhtml", data);                   
-                }    
-                               
-            } else {
-                console.error(xhr);
-            }
-        }
-    };
-    
-    xhr.open("GET", root + "controllers/Controller.php?" + request, true);
-    xhr.send();
+    var action = function(json){              
+        var taskToEdit = JSON.parse(json);
+        var pageData = [
+            {"info": "description", "value": taskToEdit["description"]},
+            {"info": "progress", "value": taskToEdit["progress"]},
+            {"info": "weight", "value": taskToEdit["weight"]},
+            {"info": "date", "value": taskToEdit["date"]},
+            {"info": "task_id", "value": taskToEdit["id"]}
+        ];
+        LoadPage(task_controller["folder"] + "EditTask.xhtml", pageData);                   
+    };    
+    GetRequest(serverPath + request, action);
 }
 
 /**
  * Sends the changes of the edited task to the database.
- * @param {Number} id - The id of the edited task
+ * @param {Number} id - The id of the edited task.
  * @returns {undefined}
  */
 function EditTaskPost(id){
@@ -151,7 +134,7 @@ function EditTaskPost(id){
     var progress = parseInt(document.getElementById("comp").value);
     var date = document.getElementById("date").value;
     
-    var json = [{
+    var editedTask = [{
         "id": id,
         "description": description,
         "progress": progress,
@@ -159,45 +142,39 @@ function EditTaskPost(id){
         "date": date
     }];
     
-    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(json);
-    var path = root + "controllers/Controller.php";
+    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(editedTask);
 
-    PostRequest(path, request); 
-    task_controller["index"](1,5);
+    PostRequest(serverPath, request); 
+    Tasks(1,5);
 }
 
 /**
  * Changes the state of a task to completed.
- * @param {Number} id - The id of the completed task
+ * @param {Number} id - The id of the completed task.
  * @returns {undefined}
  */
 function CompleteTask(id){    
-    var modif = [{"id": id, "completed": 1}];
+    var newState = [{"id": id, "completed": 1}];
     
-    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(modif);
-    var path = root + "controllers/Controller.php";
+    var request = "op=2&file=tasks.json&table=Tasks&data=" + JSON.stringify(newState);
     
-    PostRequest(path, request);
-    task_controller["index"](1,5);
+    PostRequest(serverPath, request);
+    Tasks(1,5);
 }
 
-function GetTaskPagination(elementCount, pageCount){
-    var pagination = [];
-        
-    do {
-        pagination.push({"page": pagination.length + 1});
-        elementCount -= pageCount;
-    } while (elementCount >= 0);
-    
-    return {"keys": ["page"], "data": pagination };
-}
-
-function FormatTaskIndexData(allTasks, keys, count){
-    var startIndex = (keys["page"] - 1) * keys["count"];
+/**
+ * Formats raw tasks informations so it can be displayed by the task index. 
+ * @param {Object} allTasks - The raw tasks informations.
+ * @param {Number} taskCount - The number of task displayed per page.
+ * @param {Number} pageCount - The number of the current page.
+ * @returns {Object} The formated information.
+ */
+function FormatTaskIndexData(allTasks, pageCount, taskCount){
+    var startIndex = (pageCount - 1) * taskCount;
     var pageDataKeys = ["id", "description", "progress", "weight", "date"];
     var pageData = {"keys": pageDataKeys, "data": []};
     
-    for(var i = startIndex; i < keys["page"] * keys["count"] && i < count; i++){
+    for(var i = startIndex; i < pageCount * taskCount && i < allTasks.length; i++){
         pageData["data"].push({
             "id": allTasks[i]["id"],
             "description": allTasks[i]["description"],

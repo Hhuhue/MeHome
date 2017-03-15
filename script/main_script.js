@@ -6,7 +6,9 @@
 
 //The number of attempts to load the content of a page.
 var ticks = 100;
+
 var root = "http://localhost/MeHome/public_html/";
+var serverPath = root + "server/Controller.php";
 
 //On load, we load the home page and set the menu items
 window.onload = function(){
@@ -168,7 +170,7 @@ function UpdateSelects(){
 
 /**
  * Executes a XMLHttpRequest of type GET
- * @param {String} resquest - The html GET request string
+ * @param {String} request - The html GET request string
  * @param {Function} action - The function to execute on success
  * @returns {undefined}
  */
@@ -239,8 +241,20 @@ function SelectThis(item){
     item.className += " mi_active";
 }
 
-function setPage(page, view){
-    var data = [{"info": "page", "value": page}];
-    LoadPage(view, data);
+/**
+ * Give the pagination informations for the task index.
+ * @param {Number} elementCount - The total number of existing elements.
+ * @param {Number} pageCount - The number of displayed element per page.
+ * @returns {Object} The pagination informations.
+ */
+function GetPagination(elementCount, pageCount){
+    var pagination = [];
+        
+    do {
+        pagination.push({"page": pagination.length + 1});
+        elementCount -= pageCount;
+    } while (elementCount >= 0);
+    
+    return {"keys": ["page"], "data": pagination };
 }
 
