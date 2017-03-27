@@ -11,7 +11,8 @@ var task_controller = {
     "add_post": function(){ AddTaskPost(); },
     "update": function(){ UpdateTasks(); },
     "edit_get": function(id){ EditTaskGet(id); },
-    "edit_post": function(id){ EditTaskPost(id); },
+    "edit_post": function(id){ EditTaskPost(id); },    
+    "delete": function(id){ DeleteTask(id); },
     "complete": function(id) { CompleteTask(id); }
 };
 
@@ -22,5 +23,6 @@ var subject_controller = {
     "add_post": function(){ AddSubjectPost(); },
     "update": function(){ UpdateTasks(); },
     "edit_get": function(id){ EditSubjectGet(id); },
-    "edit_post": function(id){ EditSubjectPost(id); }
+    "edit_post": function(id){ EditSubjectPost(id); },
+    "delete": function(id){ DeleteSubject(id); }
 };

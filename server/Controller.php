@@ -1,6 +1,7 @@
 <?php
 
 include_once 'Database.php';
+include_once 'JSQL.php';
 $bd;
 
 if(isset($_GET['op'])){    
@@ -37,4 +38,8 @@ else if(isset($_POST['op'])){
         default:
             return -1;
     }
+}
+else if (isset($_GET['query'])){
+    $sql = new JSQL();
+    $sql->ExecuteQuery($_GET['query']);
 }

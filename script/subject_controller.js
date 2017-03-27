@@ -14,6 +14,7 @@ function Subjects(page, count){
     var params = {"page": page, "count": count};
     var data = {"cndt": {"attr": "avtive", "value": 1}};
     
+    //var query = "SELECT s.id, s.name, s2.name FROM Subjects s JOIN Subjects s2 ON s.parent_id = s2.id WHERE s.active = 1;"
     var request = "?op=0&file=subjects.json&table=Subjects&data=" + JSON.stringify(data);
     
     var action = function(json, keys = params) {
@@ -23,7 +24,7 @@ function Subjects(page, count){
             {"info": "pagination", "value": ""}
         ];            
               
-        data[0]["value"] = JSON.stringify(FormatSubjectsIndexData(allSubjects, keys["page"], keys["count"]));
+        data[0]["value"] = JSON.stringify(FormatSubjectIndexData(allSubjects, keys["page"], keys["count"]));
         data[1]["value"] = JSON.stringify(GetPagination(allSubjects.length, keys["count"]));
         
         LoadPage(subject_controller["folder"] + "Tasks.xhtml", data);

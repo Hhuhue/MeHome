@@ -3,8 +3,8 @@
     <div class="content">
         <hr/>        
         <div class="form_section">
-            <label for="parent">Sujet parent :</label>
-            <select name="foreach" element="Tasks" from="tasks.json" data="id,name" cndt="active:1" id="parent" class="input">
+            <label for="parent_id">Sujet parent :</label>
+            <select id='parent_id' name="foreach" class="input">
                 <option value="%id%">%name%</option>
             </select>
         </div>
@@ -13,7 +13,7 @@
             <input id="name" type="text" placeholder="Nom" class="input"/>
         </div> 
         <div class="form_section">
-            <span class="button btn_submit" onclick="AddSubject();">Ajouter</span>
+            <span class="button btn_submit" onclick='subject_controller["add_post"]()'>Ajouter</span>
         </div>  
     </div>  
 </div>
