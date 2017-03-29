@@ -6,8 +6,9 @@ $test = "SELECT t.description, t.id, s.name, s2.name" .
 
 class JSQL{
     
-    private $tablesName;
     private $tables;
+    private $tablesName;
+    private $tablesJoint;
     private $columns;
     
     public function ExecuteQuery($query){        
@@ -29,19 +30,22 @@ class JSQL{
         
         $this->columns = explode(',', str_replace('SELECT', '', $queryBlocks["select"]));
         
-        $fromBlocks = (strpos('JOIN', $queryBlocks["from"]) !== false) 
+        $fromBlocks = (strpos($queryBlocks["from"], 'JOIN') !== false) 
                 ? explode('JOIN', $queryBlocks["from"]) 
                 : array(0 => $queryBlocks["from"]);
         
         $fromBlocks[0] = str_replace('FROM', '', $fromBlocks[0]);
         $fromTable = explode(' ', $fromBlocks[0])[1];
+        $fromPref = explode(' ', $fromBlocks[0])[2];
 
-        $this->tablesName = array(explode(' ', $fromBlocks[0])[2] => explode(' ', $fromBlocks[0])[1]);
+        $this->tablesName = array($fromPref => $fromTable);
         $this->tables[$fromTable] = json_decode(file_get_contents('../data/' . strtolower($fromTable) . '.json'), true)[$fromTable];
 
         for($i = 1; $i < count($fromBlocks); $i++){
-            $joinTable = explode(' ', explode('ON', $fromBlocks[$i])[0]);
+            $joinParts = explode('ON', $fromBlocks[$i]);
+            $joinTable = explode(' ', $joinParts[0]);
             $this->tablesName[$joinTable[2]] = $joinTable[1];
+            $this->tablesJoint[$joinTable[2]] = $joinParts[1];
         }
         
         $result = [];
@@ -49,11 +53,14 @@ class JSQL{
         foreach($this->tables[$fromTable] as $entry){
             $line = [];
             
-            if($this->doesEntryRespectCondition($entry, $queryBlocks["where"], $fromTable)){
+            if($this->doesEntryRespectCondition($entry, $queryBlocks["where"], $fromPref)){
                 foreach($this->columns as $info){
                     $colInfo = explode('.', str_replace(' ', '', $info));
-                    if($this->tablesName[$colInfo[0]] == $fromTable){
-                        array_push($line, $entry[$colInfo[1]]);
+                    if($colInfo[0] == $fromPref){
+                        $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
+                        array_push($line, $value);
+                    } else {
+                        array_push($line, $this->joinData($entry, $info, $fromPref));
                     }
                 }
                 array_push($result, $line);  
@@ -87,7 +94,7 @@ class JSQL{
             "where" => $whereBlock);
     }
     
-    private function doesEntryRespectCondition($entry, $whereBlock, $fromTable){
+    private function doesEntryRespectCondition($entry, $whereBlock, $fromPref){
         if($whereBlock == ""){
             return true;
         }        
@@ -108,16 +115,52 @@ class JSQL{
         
         foreach($whereVariables as $info){ 
             $colInfo = explode('.', str_replace(' ', '', $info));
-            if($this->tablesName[$colInfo[0]] == $fromTable){
-                $toEval = str_replace($info, $entry[$colInfo[1]], $toEval);
+            if($colInfo[0] == $fromPref){
+                $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
+                $toEval = str_replace($info, $value, $toEval);
+            } else {
+                $toEval = str_replace($info, $this->joinData($entry, $info, $fromPref), $toEval);
             }
         }
         
-        return eval("return $toEval");
+        return eval("return $toEval;");
     }
     
-    private function joinData(){
+    private function joinData($entry, $data, $fromPref){
+        $dataParts = explode('.', str_replace(' ', '', $data));
+        $tablePref = $dataParts[0];        
+        $tableName = $this->tablesName[$tablePref];
         
+        if(!isset($this->tables[$tableName])){
+            $this->tables[$tableName] = json_decode(file_get_contents('../data/' . strtolower($tableName) . '.json'), true)[$tableName];            
+        }
+        
+        $joinCondition = $this->tablesJoint[$tablePref];
+        $joinVariables = [];
+        $joinParts = explode(' ', $joinCondition);        
+        
+        foreach($joinParts as $part){
+            if(strpos($part, '.') !== false){
+                array_push($joinVariables, $part);
+            }
+        }
+        
+        foreach($joinVariables as $info){ 
+            $colInfo = explode('.', str_replace(' ', '', $info));
+            if($colInfo[0] == $fromPref){
+                $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
+                $joinCondition = str_replace($info, $value, $joinCondition);
+            }
+        }
+        
+        foreach($this->tables[$tableName] as $joinedEntry){
+            if($this->doesEntryRespectCondition($joinedEntry, $joinCondition, $tablePref)){
+                $value = (($joinedEntry[$dataParts[1]] == '') ? null : $joinedEntry[$dataParts[1]]);
+                return $value;
+            }
+        }
+        
+        return null;
     }
 }
 
