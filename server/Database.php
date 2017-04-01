@@ -108,7 +108,7 @@ class Database{
         
         $newEntry = '{ "id": ' . ($id + 1);
         foreach(array_keys($infos) as $info){
-            $newEntry = $newEntry . ',"' . $info . '": ' . (($infos[$info] == '') ? 'null' : $infos[$info]);
+            $newEntry = $newEntry . ',"' . $info . '": ' . (($infos[$info] === '') ? 'null' : $infos[$info]);
         }
         $newEntry = $newEntry . '}';
         

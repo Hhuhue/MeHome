@@ -14,10 +14,13 @@ function Tasks(page, count){
     var params = {"page": page, "count": count};
     var data = {"cndt": {"attr": "completed", "value": 0}};
     
-    var request = "?op=0&file=tasks.json&table=Tasks&data=" + JSON.stringify(data);
+    var query = "SELECT t.id, t.description, t.progress, t.weight, t.date" +
+                "FROM Tasks t WHERE t.completed == 0;"
+        
+    var request = "?query=" + query;
     
     var action = function(json, keys = params) {
-        var allTasks = JSON.parse(json);
+        var allTasks = JSON.parse(json)["Lines"];
         
         var data = [
             {"info": "page_data", "value": ""},
@@ -108,15 +111,18 @@ function DeleteTask(id){
  * @returns {undefined}
  */
 function EditTaskGet(id){
-    var request = "op=1&file=tasks.json&table=Tasks&id=" + id;
+    var query = "SELECT t.id, t.description, t.progress, t.weight, t.date" +
+                "FROM Tasks t WHERE t.id == " + id + ";"
+        
+    var request = "?query=" + query;
     var action = function(json){              
-        var taskToEdit = JSON.parse(json);
+        var taskToEdit = JSON.parse(json)["Lines"][0];
         var pageData = [
-            {"info": "description", "value": taskToEdit["description"]},
-            {"info": "progress", "value": taskToEdit["progress"]},
-            {"info": "weight", "value": taskToEdit["weight"]},
-            {"info": "date", "value": taskToEdit["date"]},
-            {"info": "task_id", "value": taskToEdit["id"]}
+            {"info": "description", "value": taskToEdit["t.description"]},
+            {"info": "progress", "value": taskToEdit["t.progress"]},
+            {"info": "weight", "value": taskToEdit["t.weight"]},
+            {"info": "date", "value": taskToEdit["t.date"]},
+            {"info": "task_id", "value": taskToEdit["t.id"]}
         ];
         LoadPage(task_controller["folder"] + "EditTask.xhtml", pageData);                   
     };    
@@ -176,11 +182,11 @@ function FormatTaskIndexData(allTasks, pageCount, taskCount){
     
     for(var i = startIndex; i < pageCount * taskCount && i < allTasks.length; i++){
         pageData["data"].push({
-            "id": allTasks[i]["id"],
-            "description": allTasks[i]["description"],
-            "progress": allTasks[i]["progress"],
-            "weight": allTasks[i]["weight"],
-            "date": allTasks[i]["date"]
+            "id": allTasks[i]["t.id"],
+            "description": allTasks[i]["t.description"],
+            "progress": allTasks[i]["t.progress"],
+            "weight": allTasks[i]["t.weight"],
+            "date": allTasks[i]["t.date"]
         });
     }
     

@@ -1,5 +1,5 @@
 <?php
-$test = "SELECT t.description, t.id, s.name, s2.name" . 
+$exemple = "SELECT t.description, t.id, s.name, s2.name" . 
 	" FROM Tasks t JOIN Subjects s ON s.id = t.subject_id" .
 	" JOIN Subjects s2 ON s2.id = s.parent_id" .
 	" WHERE completed = 0;";
@@ -48,25 +48,26 @@ class JSQL{
             $this->tablesJoint[$joinTable[2]] = $joinParts[1];
         }
         
-        $result = [];
+        $result = array("Lines" => []);
         
         foreach($this->tables[$fromTable] as $entry){
-            $line = [];
+            $line = array();
             
             if($this->doesEntryRespectCondition($entry, $queryBlocks["where"], $fromPref)){
                 foreach($this->columns as $info){
                     $colInfo = explode('.', str_replace(' ', '', $info));
                     if($colInfo[0] == $fromPref){
-                        $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
-                        array_push($line, $value);
+                        $value = strlen(strval($entry[$colInfo[1]])) === 0 ? 'null' : $entry[$colInfo[1]];
+                        $line[str_replace(' ', '', $info)] = $value;
                     } else {
-                        array_push($line, $this->joinData($entry, $info, $fromPref));
+                        $line[str_replace(' ', '', $info)] = $this->joinData($entry, $info, $fromPref);
                     }
                 }
-                array_push($result, $line);  
+                array_push($result["Lines"], $line);  
             }    
-        }
-        var_dump($result);        
+        }        
+       
+        echo json_encode($result);
     }
     
     private function getSelectBlocks($query){
@@ -75,9 +76,9 @@ class JSQL{
         $hasWhereBlock = (strpos($query, 'WHERE') !== false);
         
         if($hasWhereBlock){
-                $fromLength = strpos($query, 'WHERE') - strpos($query, 'FROM');
+            $fromLength = strpos($query, 'WHERE') - strpos($query, 'FROM');
         } else {
-                $fromLength = strpos($query, ';') - strpos($query, 'FROM');	
+            $fromLength = strpos($query, ';') - strpos($query, 'FROM');	
         }
 
         $selectBlock = substr($query, strpos($query, 'SELECT'), $selectLength);
@@ -116,13 +117,12 @@ class JSQL{
         foreach($whereVariables as $info){ 
             $colInfo = explode('.', str_replace(' ', '', $info));
             if($colInfo[0] == $fromPref){
-                $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
+                $value = (strlen(strval($entry[$colInfo[1]])) === 0 ? 'null' : $entry[$colInfo[1]]);
                 $toEval = str_replace($info, $value, $toEval);
             } else {
                 $toEval = str_replace($info, $this->joinData($entry, $info, $fromPref), $toEval);
             }
         }
-        
         return eval("return $toEval;");
     }
     
@@ -148,19 +148,25 @@ class JSQL{
         foreach($joinVariables as $info){ 
             $colInfo = explode('.', str_replace(' ', '', $info));
             if($colInfo[0] == $fromPref){
-                $value = (($entry[$colInfo[1]] == '') ? 'null' : $entry[$colInfo[1]]);
+                $value = strlen(strval($entry[$colInfo[1]])) === 0 ? 'null' : $entry[$colInfo[1]];
                 $joinCondition = str_replace($info, $value, $joinCondition);
             }
         }
         
         foreach($this->tables[$tableName] as $joinedEntry){
             if($this->doesEntryRespectCondition($joinedEntry, $joinCondition, $tablePref)){
-                $value = (($joinedEntry[$dataParts[1]] == '') ? null : $joinedEntry[$dataParts[1]]);
+                $value = strlen(strval($joinedEntry[$dataParts[1]])) === '' ? null : $joinedEntry[$dataParts[1]];
                 return $value;
             }
         }
         
         return null;
+    }
+    
+    private function dump($data){
+        $fp = fopen('../data/phpdump.txt', 'w');
+        fwrite($fp, $data);
+        fclose($fp);
     }
 }
 

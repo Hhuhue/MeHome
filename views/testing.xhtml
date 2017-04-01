@@ -10,7 +10,7 @@
     <button onclick="var request = '?query=' + document.getElementById('request').value;
 
             var action = function(json) {
-                document.getElementById('result').innerHTML = json;
+                console.log(json);
             };
     
             GetRequest(serverPath + request, action);">Button</button>

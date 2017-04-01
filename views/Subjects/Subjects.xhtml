@@ -5,16 +5,18 @@
         <table cellspacing="0" cellpadding="0" class="table" style="width: 90%">
             <thead>
                 <tr>
-                    <td><div class="table_header"></div><div class="table_head">Nom</div></td>           
+                    <td><div class="table_header"></div><div class="table_head">Nom</div></td> 
+                    <td><div class="table_header"></div><div class="table_head">Parent</div></td>             
                     <td><div class="table_header"></div><div class="table_head">&nbsp;</div></td>
                 </tr>
             </thead>
             <tbody name="foreach" data='%page_data%'>
                 <tr>
                     <td><span class="text_cell">%name%</span></td>
+                    <td><span class="text_cell">%parent_name%</span></td>
                     <td class="no_select">
                         <span>
-                            <span class="button btn_edit" onclick='subject_controller["edit"](%id%)'>Modifer</span>
+                            <span class="button btn_edit" onclick='subject_controller["edit_get"](%id%)'>Modifer</span>
                             <span class="button btn_delete" onclick='subject_controller["delete"](%id%)'>Supprimer</span>
                         </span>
                     </td>
@@ -22,7 +24,7 @@
             </tbody>
         </table>  
         <div name="foreach" data='%pagination%'>
-            <span class='button btn_submit' onclick='subject_controller["index"](%page%,5)'>%i%</span>
+            <span class='button btn_submit' onclick='subject_controller["index"](%page%,5)'>%page%</span>
         </div>
         <span class="button btn_submit" onclick='subject_controller["add_get"]()' style="margin-top: 1em">Ajouter</span>
     </div>
