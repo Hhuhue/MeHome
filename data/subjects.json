@@ -1,1 +1,1 @@
-{"Subjects":[{"id":1,"name":"Macro\u00e9conomie","parent_id":null,"active":1},{"id":2,"name":"Test","parent_id":1,"active":0},{"id":3,"name":"Devoirs","parent_id":1,"active":1},{"id":4,"name":"Mourir","parent_id":3,"active":0}],"Ids":4}
+{"Subjects":[{"id":1,"name":"Macro\u00e9conomie","parent_id":null,"active":0},{"id":2,"name":"Test","parent_id":1,"active":0},{"id":3,"name":"Devoirs","parent_id":1,"active":0},{"id":4,"name":"Mourir","parent_id":3,"active":0}],"Ids":4}

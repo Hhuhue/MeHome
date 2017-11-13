@@ -12,6 +12,7 @@
         <script src="script/progress_bar.js" type="text/javascript"></script>
         <script src="script/task_controller.js" type="text/javascript"></script>
         <script src="script/subject_controller.js" type="text/javascript"></script>
+        <script src="script/event_controller.js" type="text/javascript"></script>
         <script src="script/controllers.js" type="text/javascript"></script>
         <link rel="icon" type="image/png" href="resources/house-logo-hi.png" />
     </head>
@@ -27,10 +28,10 @@
                         Accueil
                     </span>
                 </div>
-                <div class="menu_item" onclick='task_controller["index"](1,5)'>
+                <div class="menu_item" onclick="task_controller['index'](1,5)">
                     <span><i class="fa fa-list" style="margin-right: 0.5em;"></i>Mes Tâches</span>
                 </div>
-                <div class="menu_item" onclick='subject_controller["index"](1,5)'>
+                <div class="menu_item" onclick="subject_controller['index'](1,5)">
                     <span><i class="fa fa-clipboard" style="margin-right: 0.5em;"></i>Mes Sujets</span>
                 </div>             
                 <div class="menu_item">
@@ -39,7 +40,7 @@
                 <div class="menu_item">
                     <span><i class="fa fa-user" style="margin-right: 0.5em;"></i>Mon Compte</span>
                 </div>
-                <div class="menu_item">
+                <div class="menu_item" onclick="event_controller['index'](new Date())">
                     <span><i class="fa fa-calendar" style="margin-right: 0.5em;"></i>Évènements</span>
                 </div>
                 <div class="menu_item" onclick="LoadPage('views/testing.xhtml')">

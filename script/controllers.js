@@ -26,3 +26,8 @@ var subject_controller = {
     "edit_post": function(id){ EditSubjectPost(id); },
     "delete": function(id){ DeleteSubject(id); }
 };
+
+var event_controller = {
+    "folder": 'views/Events/',
+    "index": function(date){ Events(date); }
+};

@@ -5,6 +5,12 @@
         <p><b>%2%</b></p>
         <hr/>
     </div>
+    <div name="foreach" data='{"keys":["i"], "data":[{"i": 0}, {"i": 1}, {"i": 2}, {"i": 3}, {"i": 4}]}'>
+        <p>%i%</p>
+        <div name="foreach" data='{"keys":["j"], "data":[{"j": "A"}, {"j": "B"}, {"j": "C"}, {"j": "D"}, {"j": "E"}]}'>
+            <span>%j%</span>
+        </div>
+    </div>
     <input id="request" type="text" class="input" />
     <div id="result"></div>
     <button onclick="var request = '?query=' + document.getElementById('request').value;
